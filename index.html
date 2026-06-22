@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:title" content="CDE Pinar Alcorcón - Torneo Benidorm" />
+  <meta property="og:description" content="📅 Horarios, 👥 grupos, 🏆 fase final y 📍 pabellones del Costa Blanca Futsal Cup." />
+  <meta property="og:image" content="pinar.jpg" />
+  <meta property="og:type" content="website" />
+  <title>CDE Pinar - Benidorm 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    .fade-in { animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="bg-gray-200 font-sans flex justify-center p-0 m-0 text-gray-800 h-screen w-full">
+  <div class="w-full max-w-md bg-white relative flex flex-col mx-auto h-full shadow-2xl overflow-hidden border-x border-gray-300">
+    <div class="bg-[#da291c] pt-8 pb-4 px-5 shadow-md z-10 rounded-b-[24px]">
+      <div class="flex justify-between items-center mb-5">
+        <div class="flex-1">
+          <h1 class="text-[32px] font-black tracking-tight leading-none text-white drop-shadow-sm">CDE PINAR</h1>
+          <p class="text-white text-[15px] font-semibold mt-1 drop-shadow-sm">Torneo Benidorm 2026</p>
+        </div>
+        <div class="relative w-[85px] h-[85px] flex-shrink-0 bg-white rounded-full border-[4px] border-[#facc15] shadow-lg flex items-center justify-center ml-2 overflow-hidden">
+          <img src="pinar.jpg" alt="Escudo CDE Pinar" class="w-full h-full object-contain" />
+        </div>
+      </div>
+      <div class="grid grid-cols-4 bg-[#b21c16] rounded-xl p-1 shadow-inner min-h-12 relative gap-1">
+        <button id="tab-partidos" class="tab-btn active-tab"><span class="text-lg">📅</span><span>Partidos Liguilla</span></button>
+        <button id="tab-grupos" class="tab-btn inactive-tab"><span class="text-lg">👥</span><span>Grupos</span></button>
+        <button id="tab-final" class="tab-btn inactive-tab"><span class="text-lg">🏆</span><span>Fase Final A-B</span></button>
+        <button id="tab-sedes" class="tab-btn inactive-tab"><span class="text-lg">📍</span><span>Sedes</span></button>
+      </div>
+    </div>
+
+    <div class="flex-1 px-5 py-6 overflow-y-auto bg-gray-50 pb-24">
+      <div id="category-block" class="mb-6">
+        <h2 class="text-gray-800 font-bold mb-4 text-lg">Elige la categoría:</h2>
+        <div id="category-buttons" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <div id="view-partidos" class="fade-in"><div id="matches-container"></div></div>
+      <div id="view-grupos" class="hidden fade-in"><div id="groups-container"></div></div>
+      <div id="view-final" class="hidden fade-in"><div id="final-container"></div></div>
+
+      <div id="view-sedes" class="hidden fade-in space-y-4">
+        <h2 class="text-gray-800 font-bold mb-2 text-lg">Direcciones de juego:</h2>
+        <p class="text-sm text-gray-500 mb-4 bg-yellow-50 border border-yellow-200 p-3 rounded-lg border-l-4 border-l-yellow-400">
+          ⚠️ <strong>Aviso:</strong> Mirad bien la columna "Campo Asignado" en los partidos, el club juega en varias ciudades.
+        </p>
+        <div id="venues-container" class="space-y-4"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const tabBase = "flex flex-col sm:flex-row items-center justify-center gap-1 text-[12px] sm:text-[13px] font-bold rounded-lg transition-all cursor-pointer z-10 px-1 py-2";
+const activeClass = tabBase + " text-[#da291c] bg-white shadow-sm";
+const inactiveClass = tabBase + " text-white bg-transparent opacity-90 hover:opacity-100";
+
+document.querySelectorAll('.tab-btn').forEach(btn => btn.className = inactiveClass);
+document.getElementById('tab-partidos').className = activeClass;
+
+const categories = ["Benjamín", "Alevín A", "Alevín B", "Infantil", "Cadete", "Juvenil"];
+let selectedCategory = "Benjamín";
+let activeView = "partidos";
+
+const categoryInfo = {
+  "Benjamín": { code: "B10", group: "1", official: "CDE PINAR ALCORCÓN" },
+  "Alevín A": { code: "B12", group: "1", official: "CDE PINAR ALCORCÓN (A)" },
+  "Alevín B": { code: "B12", group: "2", official: "CDE PINAR ALCORCÓN (B)" },
+  "Infantil": { code: "B14", group: "5", official: "CDE PINAR ALCORCÓN" },
+  "Cadete": { code: "B16", group: "5", official: "CDE PINAR ALCORCÓN" },
+  "Juvenil": { code: "B19", group: "2", official: "CDE PINAR ALCORCÓN" }
+};
+
+const groupsData = {
+  "B10": {
+    "1": ["CDE PINAR ALCORCÓN", "VENEZUELA FUTSAL CUP", "ALICANTE ALL STARS", "SAINT OUEN FUTSAL"],
+    "2": ["WATTRELOS FUTSAL", "COLEGIO SANTA SUSANA", "AFBB (A)", "OLE COLOMBIAN GROUP"],
+    "3": ["C.D. CALPE FUTSAL", "AFBB (B)", "CRETEIL PALAIS FUTSAL", "KILCOON FC"]
+  },
+  "B12": {
+    "1": ["WATTRELOS FUTSAL", "CDE PINAR ALCORCÓN (A)", "OLE COLOMBIAN GROUP", "C.D. ENTRECULTURAS MONTESION (C)"],
+    "2": ["VENEZUELA FUTSAL CUP", "SOUTHAMPTON AZTECS BLACK", "LICEO FRANCÉS MÁLAGA", "CDE PINAR ALCORCÓN (B)"],
+    "3": ["C.D. ENTRECULTURAS MONTESION (A)", "C.D. CALPE FUTSAL", "VERSIANE FUTSAL", "COLEGIO SANTA SUSANA (B)"],
+    "4": ["C.D. ENTRECULTURAS MONTESION (B)", "ASSOC. NANTAISE FUTSAL", "CFS SAN VICENTE DEL RASPEIG", "COLEGIO SANTA SUSANA (A)"],
+    "5": ["ALONIS VILLAJOYOSA F.S.", "C.D. ENTRECULTURAS MONTESION (D)", "F.S. MÓSTOLES", "BUCKS FUTSAL CLUB"]
+  },
+  "B14": {
+    "1": ["NORMANDIE FUTSAL (A)", "SANTA MARÍA LA BLANCA", "ASSOC. MUNDO MODERNO DE FUTSAL", "RIBECO CASTALLA F.S."],
+    "2": ["VERSIANE FUTSAL", "COLEGIO SANTA SUSANA", "LICEO FRANCÉS MÁLAGA (A)", "DINAMIK BONDY FUTSAL"],
+    "3": ["NANTES DOULON BOTTIÈRE FUTSAL", "BISHOPS STORTFORD FUTSAL CLUB", "CIUDAD DE LORCA F.S.", "F.S. MÓSTOLES (B)"],
+    "4": ["BUCKS FUTSAL CLUB", "F.S. MÓSTOLES (A)", "C.D. ENTRECULTURAS MONTESION (A)", "NORMANDIE FUTSAL (B)"],
+    "5": ["AUSTRALIAN FUTSAL ASSOC.", "VENEZUELA FUTSAL CUP", "LICEO FRANCÉS MÁLAGA (B)", "CDE PINAR ALCORCÓN"],
+    "6": ["AFC ILE SAINT DENIS", "C.D. ENTRECULTURAS MONTESION (B)", "CD LA VILA FUTBOL SALA", "OLE COLOMBIAN GROUP"]
+  },
+  "B16": {
+    "1": ["FUTSAL 360", "CFS L´ALFAS DEL PI", "DIAMANT FUTSAL", "COLEGIO SANTA SUSANA (B)"],
+    "2": ["VENEZUELA FUTSAL CUP (A)", "AUSTRALIAN FUTSAL ASSOC. (B)", "OLE COLOMBIAN GROUP", "EFS LLANOS DE ARIDANE"],
+    "3": ["PAYS VOIRONNAIS FUTSAL", "C.D. CALPE FUTSAL", "AUSTRALIAN FUTSAL ASSOC. (A)", "A.E. LA SALLE DE PONT D´INCA"],
+    "4": ["VERSIANE FUTSAL", "COLEGIO SANTA SUSANA (A)", "FUTSAL IBI", "VAUREAL FUTSAL"],
+    "5": ["AUSTRALIAN FUTSAL ASSOC. (C)", "VENEZUELA FUTSAL CUP (B)", "RIBECO CASTALLA F.S.", "CDE PINAR ALCORCÓN"],
+    "6": ["SAINT OUEN FUTSAL", "BISHOPS STORTFORD FUTSAL CLUB", "CIUDAD DE LORCA F.S.", "ALONIS VILLAJOYOSA F.S."]
+  },
+  "B19": {
+    "1": ["AUSTRALIAN FUTSAL ASSOC. (A)", "VENEZUELA FUTSAL CUP (B)", "LICEO FRANCÉS MÁLAGA (A)", "CFS SAN VICENTE DEL RASPEIG"],
+    "2": ["VENEZUELA FUTSAL CUP (A)", "AUSTRALIAN FUTSAL ASSOC. (C)", "CDE PINAR ALCORCÓN", "LICEO FRANCÉS MÁLAGA (B)"],
+    "3": ["ASC GARGES DJIBSON FUTSAL", "OLE COLOMBIAN GROUP", "C.D. CALPE FUTSAL", "AUSTRALIAN FUTSAL ASSOC. (B)"]
+  }
+};
+
+const matchesData = [
+ {num:87,date:"Jueves, 2 Jul",time:"16:00",category:"Benjamín",team:"CDE PINAR ALCORCÓN",rival:"VENEZUELA FUTSAL CUP",campo:"Alfaz del Pi - Polideportivo - Fútbol Sala (1)",group:"1",phase:"Liguilla"},
+ {num:90,date:"Viernes, 3 Jul",time:"11:00",category:"Benjamín",team:"CDE PINAR ALCORCÓN",rival:"SAINT OUEN FUTSAL",campo:"Altea - Polideportivo - Fútbol Sala (2)",group:"1",phase:"Liguilla"},
+ {num:91,date:"Viernes, 3 Jul",time:"18:00",category:"Benjamín",team:"CDE PINAR ALCORCÓN",rival:"ALICANTE ALL STARS",campo:"Benidorm - Raul Mesa - Fútbol Sala (1)",group:"1",phase:"Liguilla"},
+ {num:191,date:"Jueves, 2 Jul",time:"11:00",category:"Alevín A",team:"CDE PINAR ALCORCÓN (A)",rival:"WATTRELOS FUTSAL",campo:"Benidorm - Raul Mesa - Fútbol Sala (1)",group:"1",phase:"Liguilla"},
+ {num:193,date:"Jueves, 2 Jul",time:"16:00",category:"Alevín A",team:"CDE PINAR ALCORCÓN (A)",rival:"OLE COLOMBIAN GROUP",campo:"Benidorm - Raul Mesa - Fútbol Sala (1)",group:"1",phase:"Liguilla"},
+ {num:196,date:"Viernes, 3 Jul",time:"09:00",category:"Alevín A",team:"CDE PINAR ALCORCÓN (A)",rival:"C.D. ENTRECULTURAS MONTESION (C)",campo:"Benidorm - C.D. Guillermo Amor - Fútbol Sala (1)",group:"1",phase:"Liguilla"},
+ {num:198,date:"Jueves, 2 Jul",time:"13:00",category:"Alevín B",team:"CDE PINAR ALCORCÓN (B)",rival:"LICEO FRANCÉS MÁLAGA",campo:"Benidorm - Raul Mesa - Fútbol Sala (1)",group:"2",phase:"Liguilla"},
+ {num:200,date:"Jueves, 2 Jul",time:"20:00",category:"Alevín B",team:"CDE PINAR ALCORCÓN (B)",rival:"VENEZUELA FUTSAL CUP",campo:"Alfaz del Pi - Pabellón Pau Gasol - Fútbol Sala (1)",group:"2",phase:"Liguilla"},
+ {num:202,date:"Viernes, 3 Jul",time:"11:00",category:"Alevín B",team:"CDE PINAR ALCORCÓN (B)",rival:"SOUTHAMPTON AZTECS BLACK",campo:"Benidorm - Raul Mesa - Fútbol Sala (1)",group:"2",phase:"Liguilla"},
+ {num:158,date:"Jueves, 2 Jul",time:"12:00",category:"Infantil",team:"CDE PINAR ALCORCÓN",rival:"LICEO FRANCÉS MÁLAGA (B)",campo:"Altea - Polideportivo - Fútbol Sala (1)",group:"5",phase:"Liguilla"},
+ {num:160,date:"Jueves, 2 Jul",time:"19:00",category:"Infantil",team:"CDE PINAR ALCORCÓN",rival:"AUSTRALIAN FUTSAL ASSOC.",campo:"Benidorm - Raul Mesa - Fútbol Sala (1)",group:"5",phase:"Liguilla"},
+ {num:162,date:"Viernes, 3 Jul",time:"10:00",category:"Infantil",team:"CDE PINAR ALCORCÓN",rival:"VENEZUELA FUTSAL CUP",campo:"Altea - Polideportivo - Fútbol Sala (1)",group:"5",phase:"Liguilla"},
+ {num:54,date:"Jueves, 2 Jul",time:"10:00",category:"Cadete",team:"CDE PINAR ALCORCÓN",rival:"RIBECO CASTALLA F.S.",campo:"Benidorm - Raul Mesa - Fútbol Sala (1)",group:"5",phase:"Liguilla"},
+ {num:56,date:"Jueves, 2 Jul",time:"18:00",category:"Cadete",team:"CDE PINAR ALCORCÓN",rival:"AUSTRALIAN FUTSAL ASSOC. (C)",campo:"Benidorm - Raul Mesa - Fútbol Sala (1)",group:"5",phase:"Liguilla"},
+ {num:58,date:"Viernes, 3 Jul",time:"09:00",category:"Cadete",team:"CDE PINAR ALCORCÓN",rival:"VENEZUELA FUTSAL CUP (B)",campo:"Altea - Polideportivo - Fútbol Sala (1)",group:"5",phase:"Liguilla"},
+ {num:8,date:"Jueves, 2 Jul",time:"13:00",category:"Juvenil",team:"CDE PINAR ALCORCÓN",rival:"LICEO FRANCÉS MÁLAGA (B)",campo:"Altea - Polideportivo - Fútbol Sala (1)",group:"2",phase:"Liguilla"},
+ {num:9,date:"Viernes, 3 Jul",time:"13:00",category:"Juvenil",team:"CDE PINAR ALCORCÓN",rival:"AUSTRALIAN FUTSAL ASSOC. (C)",campo:"Altea - Polideportivo - Fútbol Sala (1)",group:"2",phase:"Liguilla"},
+ {num:11,date:"Viernes, 3 Jul",time:"19:00",category:"Juvenil",team:"CDE PINAR ALCORCÓN",rival:"VENEZUELA FUTSAL CUP (A)",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",group:"2",phase:"Liguilla"}
+];
+
+const finalData = [
+ {code:"B10",num:105,date:"Sábado, 4 Jul",time:"16:00",local:"4º GRUPO 1",visitor:"4º GRUPO 2",campo:"Benidorm - Raul Mesa - Fútbol Sala (1)",phase:"Fase final B",round:"Semifinales"},
+ {code:"B10",num:106,date:"Sábado, 4 Jul",time:"16:00",local:"4º GRUPO 3",visitor:"3º Mejor 3º",campo:"Villajoyosa - Maisa Lloret - Fútbol Sala (1)",phase:"Fase final B",round:"Semifinales"},
+ {code:"B10",num:108,date:"Sábado, 4 Jul",time:"09:00",local:"1º GRUPO 1",visitor:"2º GRUPO 2",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B10",num:109,date:"Sábado, 4 Jul",time:"09:00",local:"1º GRUPO 3",visitor:"1º Mejor 3º",campo:"Altea - Polideportivo - Fútbol Sala (2)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B10",num:110,date:"Sábado, 4 Jul",time:"09:00",local:"1º GRUPO 2",visitor:"2º Mejor 3º",campo:"Calpe - Polideportivo - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B10",num:111,date:"Sábado, 4 Jul",time:"10:00",local:"2º GRUPO 1",visitor:"2º GRUPO 3",campo:"Altea - Polideportivo - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B10",num:112,date:"Sábado, 4 Jul",time:"16:00",local:"GANADOR PARTIDO Nº108",visitor:"GANADOR PARTIDO Nº109",campo:"Altea - Polideportivo - Fútbol Sala (1)",phase:"Fase final A",round:"Semifinales"},
+ {code:"B10",num:113,date:"Sábado, 4 Jul",time:"16:00",local:"GANADOR PARTIDO Nº110",visitor:"GANADOR PARTIDO Nº111",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",phase:"Fase final A",round:"Semifinales"},
+ {code:"B10",num:107,date:"Domingo, 5 Jul",time:"10:00",local:"GANADOR PARTIDO Nº105",visitor:"GANADOR PARTIDO Nº106",campo:"Altea - Polideportivo - Fútbol Sala (2)",phase:"Fase final B",round:"Final"},
+ {code:"B10",num:114,date:"Domingo, 5 Jul",time:"09:30",local:"GANADOR PARTIDO Nº112",visitor:"GANADOR PARTIDO Nº113",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",phase:"Fase final A",round:"Final"},
+
+ {code:"B12",num:221,date:"Viernes, 3 Jul",time:"17:00",local:"4º GRUPO 1",visitor:"4º GRUPO 2",campo:"Alfaz del Pi - Pabellón Pau Gasol - Fútbol Sala (1)",phase:"Fase final B",round:"Fase previa"},
+ {code:"B12",num:222,date:"Viernes, 3 Jul",time:"18:00",local:"4º GRUPO 4",visitor:"4º GRUPO 5",campo:"Alfaz del Pi - Polideportivo - Fútbol Sala (1)",phase:"Fase final B",round:"Fase previa"},
+ {code:"B12",num:230,date:"Viernes, 3 Jul",time:"17:00",local:"2º GRUPO 1",visitor:"2º GRUPO 2",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",phase:"Fase final A",round:"Fase previa"},
+ {code:"B12",num:231,date:"Viernes, 3 Jul",time:"17:00",local:"2º GRUPO 4",visitor:"2º GRUPO 5",campo:"Altea - Polideportivo - Fútbol Sala (1)",phase:"Fase final A",round:"Fase previa"},
+ {code:"B12",num:223,date:"Sábado, 4 Jul",time:"10:00",local:"3º GRUPO 1",visitor:"3º GRUPO 2",campo:"Alfaz del Pi - Polideportivo - Fútbol Sala (1)",phase:"Fase final B",round:"Cuartos de final"},
+ {code:"B12",num:224,date:"Sábado, 4 Jul",time:"10:00",local:"3º GRUPO 3",visitor:"GANADOR PARTIDO Nº222",campo:"Calpe - Polideportivo - Fútbol Sala (2)",phase:"Fase final B",round:"Cuartos de final"},
+ {code:"B12",num:225,date:"Sábado, 4 Jul",time:"11:00",local:"3º GRUPO 4",visitor:"GANADOR PARTIDO Nº221",campo:"Alfaz del Pi - Polideportivo - Fútbol Sala (1)",phase:"Fase final B",round:"Cuartos de final"},
+ {code:"B12",num:226,date:"Sábado, 4 Jul",time:"11:00",local:"3º GRUPO 5",visitor:"4º GRUPO 3",campo:"Altea - Polideportivo - Fútbol Sala (2)",phase:"Fase final B",round:"Cuartos de final"},
+ {code:"B12",num:232,date:"Sábado, 4 Jul",time:"10:00",local:"1º GRUPO 1",visitor:"1º GRUPO 2",campo:"Altea - Polideportivo - Fútbol Sala (2)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B12",num:233,date:"Sábado, 4 Jul",time:"10:00",local:"1º GRUPO 3",visitor:"GANADOR PARTIDO Nº231",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B12",num:234,date:"Sábado, 4 Jul",time:"10:00",local:"1º GRUPO 4",visitor:"GANADOR PARTIDO Nº230",campo:"Villajoyosa - Maisa Lloret - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B12",num:235,date:"Sábado, 4 Jul",time:"10:00",local:"1º GRUPO 5",visitor:"2º GRUPO 3",campo:"Calpe - Polideportivo - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B12",num:227,date:"Sábado, 4 Jul",time:"16:00",local:"GANADOR PARTIDO Nº223",visitor:"GANADOR PARTIDO Nº224",campo:"Altea - Polideportivo - Fútbol Sala (2)",phase:"Fase final B",round:"Semifinales"},
+ {code:"B12",num:228,date:"Sábado, 4 Jul",time:"17:00",local:"GANADOR PARTIDO Nº225",visitor:"GANADOR PARTIDO Nº226",campo:"Benidorm - Raul Mesa - Fútbol Sala (1)",phase:"Fase final B",round:"Semifinales"},
+ {code:"B12",num:236,date:"Sábado, 4 Jul",time:"16:00",local:"GANADOR PARTIDO Nº232",visitor:"GANADOR PARTIDO Nº233",campo:"Calpe - Polideportivo - Fútbol Sala (1)",phase:"Fase final A",round:"Semifinales"},
+ {code:"B12",num:237,date:"Sábado, 4 Jul",time:"16:00",local:"GANADOR PARTIDO Nº234",visitor:"GANADOR PARTIDO Nº235",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",phase:"Fase final A",round:"Semifinales"},
+ {code:"B12",num:229,date:"Domingo, 5 Jul",time:"10:00",local:"GANADOR PARTIDO Nº227",visitor:"GANADOR PARTIDO Nº228",campo:"Altea - Polideportivo - Fútbol Sala (1)",phase:"Fase final B",round:"Final"},
+ {code:"B12",num:238,date:"Domingo, 5 Jul",time:"09:45",local:"GANADOR PARTIDO Nº236",visitor:"GANADOR PARTIDO Nº237",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",phase:"Fase final A",round:"Final"},
+
+ {code:"B14",num:169,date:"Viernes, 3 Jul",time:"16:00",local:"4º GRUPO 1",visitor:"4º GRUPO 2",campo:"Benidorm - Raul Mesa - Fútbol Sala (1)",phase:"Fase final B",round:"Fase previa"},
+ {code:"B14",num:170,date:"Viernes, 3 Jul",time:"16:00",local:"4º GRUPO 3",visitor:"3º GRUPO 4",campo:"Altea - Polideportivo - Fútbol Sala (2)",phase:"Fase final B",round:"Fase previa"},
+ {code:"B14",num:171,date:"Viernes, 3 Jul",time:"16:00",local:"4º GRUPO 4",visitor:"4º GRUPO 5",campo:"Alfaz del Pi - Polideportivo - Fútbol Sala (1)",phase:"Fase final B",round:"Fase previa"},
+ {code:"B14",num:172,date:"Viernes, 3 Jul",time:"16:00",local:"4º GRUPO 6",visitor:"3º GRUPO 3",campo:"Calpe - Polideportivo - Fútbol Sala (2)",phase:"Fase final B",round:"Fase previa"},
+ {code:"B14",num:180,date:"Viernes, 3 Jul",time:"16:00",local:"2º GRUPO 1",visitor:"2º GRUPO 2",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",phase:"Fase final A",round:"Fase previa"},
+ {code:"B14",num:181,date:"Viernes, 3 Jul",time:"16:00",local:"2º GRUPO 3",visitor:"1º GRUPO 4",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",phase:"Fase final A",round:"Fase previa"},
+ {code:"B14",num:182,date:"Viernes, 3 Jul",time:"16:00",local:"2º GRUPO 4",visitor:"2º GRUPO 5",campo:"Villajoyosa - Maisa Lloret - Fútbol Sala (1)",phase:"Fase final A",round:"Fase previa"},
+ {code:"B14",num:183,date:"Viernes, 3 Jul",time:"16:00",local:"2º GRUPO 6",visitor:"1º GRUPO 3",campo:"Alfaz del Pi - Pabellón Pau Gasol - Fútbol Sala (1)",phase:"Fase final A",round:"Fase previa"},
+ {code:"B14",num:173,date:"Sábado, 4 Jul",time:"11:00",local:"3º GRUPO 1",visitor:"GANADOR PARTIDO Nº171",campo:"Calpe - Polideportivo - Fútbol Sala (2)",phase:"Fase final B",round:"Cuartos de final"},
+ {code:"B14",num:174,date:"Sábado, 4 Jul",time:"12:00",local:"3º GRUPO 2",visitor:"GANADOR PARTIDO Nº172",campo:"Benidorm - Raul Mesa - Fútbol Sala (1)",phase:"Fase final B",round:"Cuartos de final"},
+ {code:"B14",num:175,date:"Sábado, 4 Jul",time:"12:00",local:"3º GRUPO 5",visitor:"GANADOR PARTIDO Nº169",campo:"Altea - Polideportivo - Fútbol Sala (2)",phase:"Fase final B",round:"Cuartos de final"},
+ {code:"B14",num:176,date:"Sábado, 4 Jul",time:"12:00",local:"3º GRUPO 6",visitor:"GANADOR PARTIDO Nº170",campo:"Alfaz del Pi - Polideportivo - Fútbol Sala (1)",phase:"Fase final B",round:"Cuartos de final"},
+ {code:"B14",num:184,date:"Sábado, 4 Jul",time:"12:00",local:"1º GRUPO 1",visitor:"GANADOR PARTIDO Nº182",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B14",num:185,date:"Sábado, 4 Jul",time:"12:00",local:"1º GRUPO 2",visitor:"GANADOR PARTIDO Nº183",campo:"Calpe - Polideportivo - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B14",num:186,date:"Sábado, 4 Jul",time:"12:00",local:"1º GRUPO 5",visitor:"GANADOR PARTIDO Nº180",campo:"Altea - Polideportivo - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B14",num:187,date:"Sábado, 4 Jul",time:"12:00",local:"1º GRUPO 6",visitor:"GANADOR PARTIDO Nº181",campo:"Villajoyosa - Maisa Lloret - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B14",num:177,date:"Sábado, 4 Jul",time:"18:00",local:"GANADOR PARTIDO Nº173",visitor:"GANADOR PARTIDO Nº174",campo:"Altea - Polideportivo - Fútbol Sala (2)",phase:"Fase final B",round:"Semifinales"},
+ {code:"B14",num:178,date:"Sábado, 4 Jul",time:"18:00",local:"GANADOR PARTIDO Nº175",visitor:"GANADOR PARTIDO Nº176",campo:"Calpe - Polideportivo - Fútbol Sala (1)",phase:"Fase final B",round:"Semifinales"},
+ {code:"B14",num:188,date:"Sábado, 4 Jul",time:"18:00",local:"GANADOR PARTIDO Nº184",visitor:"GANADOR PARTIDO Nº185",campo:"Altea - Polideportivo - Fútbol Sala (1)",phase:"Fase final A",round:"Semifinales"},
+ {code:"B14",num:189,date:"Sábado, 4 Jul",time:"18:00",local:"GANADOR PARTIDO Nº186",visitor:"GANADOR PARTIDO Nº187",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",phase:"Fase final A",round:"Semifinales"},
+ {code:"B14",num:179,date:"Domingo, 5 Jul",time:"12:00",local:"GANADOR PARTIDO Nº177",visitor:"GANADOR PARTIDO Nº178",campo:"Altea - Polideportivo - Fútbol Sala (2)",phase:"Fase final B",round:"Final"},
+ {code:"B14",num:190,date:"Domingo, 5 Jul",time:"12:30",local:"GANADOR PARTIDO Nº188",visitor:"GANADOR PARTIDO Nº189",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",phase:"Fase final A",round:"Final"},
+
+ {code:"B16",num:65,date:"Viernes, 3 Jul",time:"19:00",local:"4º GRUPO 1",visitor:"4º GRUPO 2",campo:"Benidorm - Raul Mesa - Fútbol Sala (1)",phase:"Fase final B",round:"Fase previa"},
+ {code:"B16",num:66,date:"Viernes, 3 Jul",time:"19:00",local:"4º GRUPO 3",visitor:"3º GRUPO 4",campo:"Altea - Polideportivo - Fútbol Sala (2)",phase:"Fase final B",round:"Fase previa"},
+ {code:"B16",num:67,date:"Viernes, 3 Jul",time:"19:00",local:"4º GRUPO 4",visitor:"4º GRUPO 5",campo:"Calpe - Polideportivo - Fútbol Sala (1)",phase:"Fase final B",round:"Fase previa"},
+ {code:"B16",num:68,date:"Viernes, 3 Jul",time:"19:00",local:"4º GRUPO 6",visitor:"3º GRUPO 3",campo:"Calpe - Polideportivo - Fútbol Sala (2)",phase:"Fase final B",round:"Fase previa"},
+ {code:"B16",num:76,date:"Viernes, 3 Jul",time:"18:00",local:"2º GRUPO 1",visitor:"2º GRUPO 2",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",phase:"Fase final A",round:"Fase previa"},
+ {code:"B16",num:77,date:"Viernes, 3 Jul",time:"18:00",local:"2º GRUPO 3",visitor:"1º GRUPO 4",campo:"Alfaz del Pi - Pabellón Pau Gasol - Fútbol Sala (1)",phase:"Fase final A",round:"Fase previa"},
+ {code:"B16",num:78,date:"Viernes, 3 Jul",time:"19:00",local:"2º GRUPO 4",visitor:"2º GRUPO 5",campo:"Villajoyosa - Maisa Lloret - Fútbol Sala (1)",phase:"Fase final A",round:"Fase previa"},
+ {code:"B16",num:79,date:"Viernes, 3 Jul",time:"19:00",local:"2º GRUPO 6",visitor:"1º GRUPO 3",campo:"Alfaz del Pi - Pabellón Pau Gasol - Fútbol Sala (1)",phase:"Fase final A",round:"Fase previa"},
+ {code:"B16",num:69,date:"Sábado, 4 Jul",time:"12:00",local:"3º GRUPO 1",visitor:"GANADOR PARTIDO Nº67",campo:"Calpe - Polideportivo - Fútbol Sala (2)",phase:"Fase final B",round:"Cuartos de final"},
+ {code:"B16",num:70,date:"Sábado, 4 Jul",time:"12:00",local:"3º GRUPO 2",visitor:"GANADOR PARTIDO Nº68",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",phase:"Fase final B",round:"Cuartos de final"},
+ {code:"B16",num:71,date:"Sábado, 4 Jul",time:"13:00",local:"3º GRUPO 5",visitor:"GANADOR PARTIDO Nº65",campo:"Altea - Polideportivo - Fútbol Sala (2)",phase:"Fase final B",round:"Cuartos de final"},
+ {code:"B16",num:72,date:"Sábado, 4 Jul",time:"13:00",local:"3º GRUPO 6",visitor:"GANADOR PARTIDO Nº66",campo:"Benidorm - Raul Mesa - Fútbol Sala (1)",phase:"Fase final B",round:"Cuartos de final"},
+ {code:"B16",num:80,date:"Sábado, 4 Jul",time:"13:00",local:"1º GRUPO 1",visitor:"GANADOR PARTIDO Nº78",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B16",num:81,date:"Sábado, 4 Jul",time:"13:00",local:"1º GRUPO 2",visitor:"GANADOR PARTIDO Nº79",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B16",num:82,date:"Sábado, 4 Jul",time:"13:00",local:"1º GRUPO 5",visitor:"GANADOR PARTIDO Nº76",campo:"Altea - Polideportivo - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B16",num:83,date:"Sábado, 4 Jul",time:"13:00",local:"1º GRUPO 6",visitor:"GANADOR PARTIDO Nº77",campo:"Villajoyosa - Maisa Lloret - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B16",num:73,date:"Sábado, 4 Jul",time:"19:00",local:"GANADOR PARTIDO Nº69",visitor:"GANADOR PARTIDO Nº70",campo:"Benidorm - Raul Mesa - Fútbol Sala (1)",phase:"Fase final B",round:"Semifinales"},
+ {code:"B16",num:74,date:"Sábado, 4 Jul",time:"19:00",local:"GANADOR PARTIDO Nº71",visitor:"GANADOR PARTIDO Nº72",campo:"Villajoyosa - Maisa Lloret - Fútbol Sala (1)",phase:"Fase final B",round:"Semifinales"},
+ {code:"B16",num:84,date:"Sábado, 4 Jul",time:"19:00",local:"GANADOR PARTIDO Nº80",visitor:"GANADOR PARTIDO Nº81",campo:"Altea - Polideportivo - Fútbol Sala (1)",phase:"Fase final A",round:"Semifinales"},
+ {code:"B16",num:85,date:"Sábado, 4 Jul",time:"19:00",local:"GANADOR PARTIDO Nº82",visitor:"GANADOR PARTIDO Nº83",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",phase:"Fase final A",round:"Semifinales"},
+ {code:"B16",num:75,date:"Domingo, 5 Jul",time:"12:00",local:"GANADOR PARTIDO Nº73",visitor:"GANADOR PARTIDO Nº74",campo:"Altea - Polideportivo - Fútbol Sala (1)",phase:"Fase final B",round:"Final"},
+ {code:"B16",num:86,date:"Domingo, 5 Jul",time:"12:45",local:"GANADOR PARTIDO Nº84",visitor:"GANADOR PARTIDO Nº85",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",phase:"Fase final A",round:"Final"},
+
+ {code:"B19",num:19,date:"Sábado, 4 Jul",time:"17:00",local:"4º GRUPO 1",visitor:"4º GRUPO 2",campo:"Villajoyosa - Maisa Lloret - Fútbol Sala (1)",phase:"Fase final B",round:"Semifinales"},
+ {code:"B19",num:20,date:"Sábado, 4 Jul",time:"17:00",local:"4º GRUPO 3",visitor:"3º Mejor 3º",campo:"Calpe - Polideportivo - Fútbol Sala (1)",phase:"Fase final B",round:"Semifinales"},
+ {code:"B19",num:22,date:"Sábado, 4 Jul",time:"11:00",local:"1º GRUPO 1",visitor:"2º GRUPO 2",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B19",num:23,date:"Sábado, 4 Jul",time:"11:00",local:"1º GRUPO 3",visitor:"1º Mejor 3º",campo:"Altea - Polideportivo - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B19",num:24,date:"Sábado, 4 Jul",time:"11:00",local:"1º GRUPO 2",visitor:"2º Mejor 3º",campo:"Villajoyosa - Maisa Lloret - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B19",num:25,date:"Sábado, 4 Jul",time:"11:00",local:"2º GRUPO 1",visitor:"2º GRUPO 3",campo:"Calpe - Polideportivo - Fútbol Sala (1)",phase:"Fase final A",round:"Cuartos de final"},
+ {code:"B19",num:26,date:"Sábado, 4 Jul",time:"17:00",local:"GANADOR PARTIDO Nº22",visitor:"GANADOR PARTIDO Nº23",campo:"Altea - Polideportivo - Fútbol Sala (1)",phase:"Fase final A",round:"Semifinales"},
+ {code:"B19",num:27,date:"Sábado, 4 Jul",time:"17:00",local:"GANADOR PARTIDO Nº24",visitor:"GANADOR PARTIDO Nº25",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",phase:"Fase final A",round:"Semifinales"},
+ {code:"B19",num:21,date:"Domingo, 5 Jul",time:"11:00",local:"GANADOR PARTIDO Nº19",visitor:"GANADOR PARTIDO Nº20",campo:"Altea - Polideportivo - Fútbol Sala (2)",phase:"Fase final B",round:"Final"},
+ {code:"B19",num:28,date:"Domingo, 5 Jul",time:"11:15",local:"GANADOR PARTIDO Nº26",visitor:"GANADOR PARTIDO Nº27",campo:"Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",phase:"Fase final A",round:"Final"}
+];
+
+const venues = [
+ {name:"C.D. Guillermo Amor", sub:"Pabellón Raúl Mesa", address:"Partida Foietes, s/n, 03502 Benidorm", q:"Ciudad+Deportiva+Guillermo+Amor+Benidorm", color:"blue"},
+ {name:"Palau d'Esports L'Illa", sub:"", address:"Partida Salto del Agua, s/n, 03502 Benidorm", q:"Palau+d+Esports+l+Illa+de+Benidorm", color:"blue"},
+ {name:"Palau d'Esports Vila d'Altea", sub:"", address:"Camí de l'Institut, 48S, 03590 Altea", q:"Palau+d+Esports+Vila+d+Altea", color:"green"},
+ {name:"Polideportivo L'Alfàs", sub:"Pabellón Pau Gasol", address:"Carrer d'Elx, 3, 03580 L'Alfàs del Pi", q:"Pabellon+Pau+Gasol+Alfaz+del+Pi", color:"purple"},
+ {name:"Pabellón Maisa Lloret", sub:"Villajoyosa", address:"03570 La Vila Joiosa / Villajoyosa", q:"Pabellon+Maisa+Lloret+Villajoyosa", color:"orange"},
+ {name:"Polideportivo Calpe", sub:"", address:"Calpe / Calp", q:"Polideportivo+Calpe", color:"cyan"}
+];
+
+function getMapQuery(campo) {
+  if(campo.includes("Raul Mesa") || campo.includes("Guillermo Amor")) return "Ciudad+Deportiva+Guillermo+Amor+Benidorm";
+  if(campo.includes("L'Illa")) return "Palau+d+Esports+l+Illa+de+Benidorm";
+  if(campo.includes("Altea")) return "Palau+d+Esports+Vila+d+Altea";
+  if(campo.includes("Pau Gasol") || campo.includes("Alfaz del Pi")) return "Pabellon+Pau+Gasol+Alfaz+del+Pi";
+  if(campo.includes("Villajoyosa")) return "Pabellon+Maisa+Lloret+Villajoyosa";
+  if(campo.includes("Calpe")) return "Polideportivo+Calpe";
+  return "Benidorm";
+}
+
+function switchTab(view) {
+  activeView = view;
+  ["partidos","grupos","final","sedes"].forEach(v => {
+    document.getElementById('tab-' + v).className = v === view ? activeClass : inactiveClass;
+    document.getElementById('view-' + v).classList.toggle('hidden', v !== view);
+  });
+  document.getElementById('category-block').classList.toggle('hidden', view === 'sedes');
+  renderAll();
+}
+
+["partidos","grupos","final","sedes"].forEach(v => document.getElementById('tab-' + v).addEventListener('click', () => switchTab(v)));
+
+function renderCategories() {
+  const box = document.getElementById('category-buttons');
+  box.innerHTML = '';
+  categories.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.innerText = cat;
+    btn.className = cat === selectedCategory
+      ? "px-5 py-2.5 rounded-full text-sm font-bold border-2 bg-green-600 text-white border-green-600 shadow-md transform scale-105 transition-all"
+      : "px-5 py-2.5 rounded-full text-sm font-bold border-2 bg-white text-gray-600 border-gray-300 hover:border-green-500 hover:text-green-600 cursor-pointer transition-all";
+    btn.onclick = () => { selectedCategory = cat; renderAll(); };
+    box.appendChild(btn);
+  });
+}
+
+function matchCard(m, idx) {
+  const mapQuery = getMapQuery(m.campo);
+  return `
+  <div class="bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
+    <div class="bg-gray-100 px-4 py-2 text-xs font-bold text-gray-600 border-b flex justify-between items-center gap-2">
+      <span>🗓️ ${m.date}</span><span class="text-red-600 bg-red-100 px-2 py-0.5 rounded">Partido nº ${m.num}</span>
+    </div>
+    <div class="p-4">
+      <div class="flex justify-between items-center mb-4">
+        <div class="flex-1 pr-3">
+          <h3 class="font-black text-gray-800 text-lg leading-tight">${m.team}</h3>
+          <p class="text-sm font-bold text-gray-500 mt-2">vs ${m.rival}</p>
+          <p class="text-xs text-green-700 font-bold mt-2 bg-green-50 inline-block px-2 py-1 rounded">Grupo ${m.group} · ${m.phase}</p>
+        </div>
+        <div class="text-center bg-red-50 text-red-700 px-4 py-3 rounded-lg border border-red-100 shadow-inner min-w-[80px]">
+          <div class="text-[10px] font-bold uppercase tracking-widest mb-1 opacity-80">Hora</div>
+          <div class="font-black text-2xl tracking-tighter">${m.time}</div>
+        </div>
+      </div>
+      <div class="mt-3 pt-3 border-t border-gray-100 flex flex-col gap-2">
+        <div class="text-[10px] text-gray-400 font-bold uppercase tracking-wide">Campo Asignado:</div>
+        <div class="text-sm text-gray-800 flex items-start gap-2 bg-gray-50 p-2 rounded-lg border border-gray-100">
+          <span class="text-base leading-none mt-0.5">📍</span><span class="font-bold flex-1 leading-snug">${m.campo}</span>
+        </div>
+        <a href="https://www.google.com/maps/search/?api=1&query=${mapQuery}" target="_blank" class="w-full inline-block text-center bg-blue-100 text-blue-700 py-2 rounded-lg text-sm font-bold hover:bg-blue-200 transition-colors">🗺️ Navegar al campo</a>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderMatches() {
+  const filtered = matchesData.filter(m => m.category === selectedCategory);
+  const info = categoryInfo[selectedCategory];
+  document.getElementById('matches-container').innerHTML = `
+    <div class="bg-white border border-green-200 p-4 rounded-xl shadow-sm mb-4 border-l-4 border-l-green-500">
+      <div class="text-xs font-black text-green-700 uppercase">${info.code} · Grupo ${info.group}</div>
+      <div class="font-black text-gray-800 mt-1">${info.official}</div>
+    </div>
+    <div class="space-y-4 fade-in">${filtered.map(matchCard).join('')}</div>`;
+}
+
+function renderGroups() {
+  const info = categoryInfo[selectedCategory];
+  const groups = groupsData[info.code];
+  let html = `<div class="bg-yellow-50 border border-yellow-200 p-3 rounded-lg mb-4 text-sm text-yellow-800 font-semibold">👥 Categoría ${info.code}. El CDE Pinar está en el <strong>Grupo ${info.group}</strong>.</div><div class="space-y-4">`;
+  Object.keys(groups).forEach(g => {
+    const isMine = g === info.group;
+    html += `<div class="bg-white border ${isMine ? 'border-green-400 border-l-4 border-l-green-500 shadow-md' : 'border-gray-200 shadow-sm'} p-4 rounded-xl">
+      <div class="flex justify-between items-center mb-3"><h3 class="font-black text-gray-800 text-lg">Grupo ${g}</h3>${isMine ? '<span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-black">CDE PINAR</span>' : ''}</div>
+      <div class="space-y-2">${groups[g].map(t => `<div class="p-2 rounded-lg border text-sm font-bold ${t.includes('PINAR') ? 'bg-green-50 border-green-200 text-green-800' : 'bg-gray-50 border-gray-100 text-gray-700'}">${t.includes('PINAR') ? '⭐ ' : ''}${t}</div>`).join('')}</div>
+    </div>`;
+  });
+  html += `</div>`;
+  document.getElementById('groups-container').innerHTML = html;
+}
+
+function finalCard(f) {
+  const isA = f.phase.includes('A');
+  const mapQuery = getMapQuery(f.campo);
+  return `<div class="bg-white border ${isA ? 'border-yellow-300' : 'border-blue-200'} shadow-sm rounded-xl overflow-hidden">
+    <div class="${isA ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'} px-4 py-2 text-xs font-black border-b flex justify-between gap-2">
+      <span>${f.phase} · ${f.round}</span><span>Nº ${f.num}</span>
+    </div>
+    <div class="p-4">
+      <div class="flex justify-between items-start gap-3">
+        <div class="flex-1">
+          <p class="font-black text-gray-800 leading-tight">${f.local}</p>
+          <p class="text-xs text-gray-400 font-bold my-1">contra</p>
+          <p class="font-black text-gray-800 leading-tight">${f.visitor}</p>
+        </div>
+        <div class="text-center bg-gray-50 px-3 py-2 rounded-lg border min-w-[76px]"><div class="text-[10px] text-gray-400 font-bold uppercase">Hora</div><div class="font-black text-gray-800 text-xl">${f.time}</div></div>
+      </div>
+      <p class="text-xs text-gray-500 font-bold mt-3">🗓️ ${f.date}</p>
+      <div class="text-sm text-gray-800 flex items-start gap-2 bg-gray-50 p-2 rounded-lg border border-gray-100 mt-2"><span>📍</span><span class="font-bold flex-1 leading-snug">${f.campo}</span></div>
+      <a href="https://www.google.com/maps/search/?api=1&query=${mapQuery}" target="_blank" class="mt-2 w-full inline-block text-center bg-blue-100 text-blue-700 py-2 rounded-lg text-sm font-bold hover:bg-blue-200 transition-colors">🗺️ Navegar al campo</a>
+    </div>
+  </div>`;
+}
+
+function renderFaseFinal() {
+  const info = categoryInfo[selectedCategory];
+  const finals = finalData.filter(f => f.code === info.code);
+  document.getElementById('final-container').innerHTML = `
+    <div class="bg-yellow-50 border border-yellow-200 p-3 rounded-lg mb-4 text-sm text-yellow-800 font-semibold">
+      🏆 Cruces oficiales preparados para ${info.code}. Cuando se sepan los resultados, sustituye “1º Grupo”, “2º Grupo” o “Ganador partido” por el equipo real.
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl p-3 mb-4 text-xs text-gray-600 font-bold">
+      Regla práctica: si el equipo queda arriba jugará Fase Final A; si queda más abajo, Fase Final B o cruces de consolación según formato de su categoría.
+    </div>
+    <div class="space-y-4">${finals.map(finalCard).join('')}</div>`;
+}
+
+function renderVenues() {
+  document.getElementById('venues-container').innerHTML = venues.map(v => `
+    <div class="bg-white border border-gray-200 p-4 rounded-xl shadow-sm">
+      <h3 class="font-black text-gray-800 text-lg leading-tight mb-1">${v.name}${v.sub ? `<br><span class="text-sm font-bold text-gray-500">${v.sub}</span>` : ''}</h3>
+      <p class="text-sm text-gray-800 font-bold mt-2">📍 ${v.address}</p>
+      <a href="https://www.google.com/maps/search/?api=1&query=${v.q}" target="_blank" class="mt-3 w-full inline-block text-center bg-blue-100 text-blue-700 py-2.5 rounded-lg text-sm font-bold hover:bg-blue-200 transition-colors">🗺️ NAVEGAR EN MAPA</a>
+    </div>`).join('');
+}
+
+function renderAll() {
+  renderCategories();
+  if(activeView === 'partidos') renderMatches();
+  if(activeView === 'grupos') renderGroups();
+  if(activeView === 'final') renderFaseFinal();
+  if(activeView === 'sedes') renderVenues();
+}
+
+renderVenues();
+renderAll();
+</script>
+</body>
+</html>
