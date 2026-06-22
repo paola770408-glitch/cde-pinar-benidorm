@@ -65,6 +65,66 @@ const inactiveClass = tabBase + " text-white bg-transparent opacity-90 hover:opa
 document.querySelectorAll('.tab-btn').forEach(btn => btn.className = inactiveClass);
 document.getElementById('tab-partidos').className = activeClass;
 
+/*
+  ===========================================================================
+  RESULTADOS AUTOMÁTICOS
+  ===========================================================================
+  Sustituye la línea de abajo por la URL real de tu resultados.json en
+  GitHub (algo como:
+  "https://raw.githubusercontent.com/paola770408-glitch/cde-pinar-benidorm/main/resultados.json")
+  Ese archivo lo genera y actualiza solo el robot de GitHub Actions.
+  Si no lo rellenas, la app sigue funcionando igual que antes (manual).
+  ===========================================================================
+*/
+const RESULTADOS_URL = "https://raw.githubusercontent.com/paola770408-glitch/cde-pinar-benidorm/main/resultados.json";
+let rawPartidos = [];
+
+async function cargarResultadosAutomaticos() {
+  if (!RESULTADOS_URL || RESULTADOS_URL.includes("TU-USUARIO")) return;
+  try {
+    const res = await fetch(RESULTADOS_URL, { cache: "no-store" });
+    if (res.ok) {
+      const data = await res.json();
+      rawPartidos = data.partidos || [];
+      renderAll();
+    }
+  } catch (e) {
+    console.warn("No se pudieron cargar los resultados automáticos:", e);
+  }
+}
+
+function obtenerResultado(num) {
+  const p = rawPartidos.find(p => String(p.num) === String(num));
+  return p && p.resultado ? p.resultado : null;
+}
+
+function calcularClasificacion(codigo, grupo) {
+  const partidos = rawPartidos.filter(p =>
+    p.categoria === codigo && String(p.grupo) === String(grupo) && p.fase === "Liguilla" && p.resultado
+  );
+  if (partidos.length === 0) return null;
+
+  const tabla = {};
+  const fila = team => (tabla[team] ||= { team, pj: 0, pg: 0, pe: 0, pp: 0, gf: 0, gc: 0, pts: 0 });
+
+  partidos.forEach(p => {
+    const partes = p.resultado.split('-').map(s => parseInt(s.trim(), 10));
+    if (partes.length !== 2 || partes.some(isNaN)) return;
+    const [gl, gv] = partes;
+    const L = fila(p.local), V = fila(p.visitante);
+    L.pj++; V.pj++;
+    L.gf += gl; L.gc += gv;
+    V.gf += gv; V.gc += gl;
+    if (gl > gv) { L.pg++; L.pts += 3; V.pp++; }
+    else if (gl < gv) { V.pg++; V.pts += 3; L.pp++; }
+    else { L.pe++; V.pe++; L.pts += 1; V.pts += 1; }
+  });
+
+  return Object.values(tabla)
+    .sort((a, b) => b.pts - a.pts || (b.gf - b.gc) - (a.gf - a.gc) || b.gf - a.gf)
+    .map((r, i) => ({ ...r, pos: i + 1 }));
+}
+
 const categories = ["Benjamín", "Alevín A", "Alevín B", "Infantil", "Cadete", "Juvenil"];
 let selectedCategory = "Benjamín";
 let activeView = "partidos";
@@ -114,6 +174,60 @@ const groupsData = {
   }
 };
 
+/*
+  ===========================================================================
+  CLASIFICACIÓN (standingsData) — CÓMO ACTUALIZARLA
+  ===========================================================================
+  Cuando en la web del torneo (tournaments.azurewebsites.net) aparezca la
+  tabla de clasificación de un grupo, cópiala aquí así:
+
+  standingsData["CODIGO"] = {
+    "NUMERO_DE_GRUPO": [
+      { pos:1, team:"NOMBRE EXACTO DEL EQUIPO", pj:3, pg:3, pe:0, pp:0, gf:14, gc:3, pts:9 },
+      { pos:2, team:"OTRO EQUIPO", pj:3, pg:2, pe:0, pp:1, gf:10, gc:6, pts:6 },
+      ...
+    ]
+  };
+
+  - pos = posición, pj = jugados, pg = ganados, pe = empatados, pp = perdidos,
+    gf = goles a favor, gc = goles en contra, pts = puntos.
+  - El NOMBRE del equipo debe coincidir con el usado en groupsData para que
+    se resalte en verde si es el Pinar.
+  - Si no añades clasificación para un grupo, simplemente se seguirá
+    mostrando la lista de equipos como hasta ahora.
+  - Puedes ir añadiendo grupo a grupo y categoría a categoría según vayan
+    publicando datos, no hace falta rellenarlo todo de golpe.
+  ===========================================================================
+*/
+const standingsData = {
+  // Ejemplo (puedes borrar este comentario y poner aquí lo real):
+  // "B12": {
+  //   "1": [
+  //     { pos:1, team:"CDE PINAR ALCORCÓN (A)", pj:3, pg:2, pe:1, pp:0, gf:9, gc:4, pts:7 },
+  //     { pos:2, team:"WATTRELOS FUTSAL", pj:3, pg:2, pe:0, pp:1, gf:8, gc:5, pts:6 }
+  //   ]
+  // }
+};
+
+/*
+  ===========================================================================
+  RESULTADOS DE PARTIDOS — CÓMO ACTUALIZARLOS
+  ===========================================================================
+  Cuando un partido del Pinar se haya jugado, busca su número (num) abajo
+  y añade el campo "resultado" con el marcador, SIEMPRE en el orden
+  "GOLES DEL PINAR - GOLES DEL RIVAL" (recuerda que "team" es el Pinar y
+  "rival" es el contrario en cada línea).
+
+  Ejemplo: si el partido nº87 lo ganó el Pinar 4-2, esa línea pasaría de:
+    {num:87, ..., group:"1", phase:"Liguilla"}
+  a:
+    {num:87, ..., group:"1", phase:"Liguilla", resultado:"4-2"}
+
+  No hace falta tocar nada más: la tarjeta del partido mostrará el
+  marcador automáticamente y lo marcará en verde (victoria), gris (empate)
+  o rojo (derrota).
+  ===========================================================================
+*/
 const matchesData = [
  {num:87,date:"Jueves, 2 Jul",time:"16:00",category:"Benjamín",team:"CDE PINAR ALCORCÓN",rival:"VENEZUELA FUTSAL CUP",campo:"Alfaz del Pi - Polideportivo - Fútbol Sala (1)",group:"1",phase:"Liguilla"},
  {num:90,date:"Viernes, 3 Jul",time:"11:00",category:"Benjamín",team:"CDE PINAR ALCORCÓN",rival:"SAINT OUEN FUTSAL",campo:"Altea - Polideportivo - Fútbol Sala (2)",group:"1",phase:"Liguilla"},
@@ -269,8 +383,19 @@ function renderCategories() {
   });
 }
 
+function resultBadge(resultado) {
+  if (!resultado) return null;
+  const [a, b] = resultado.split('-').map(s => parseInt(s.trim(), 10));
+  if (isNaN(a) || isNaN(b)) return null;
+  if (a > b) return { label: '✅ VICTORIA', cls: 'bg-green-100 text-green-700 border-green-200' };
+  if (a < b) return { label: '❌ DERROTA', cls: 'bg-red-100 text-red-700 border-red-200' };
+  return { label: '🤝 EMPATE', cls: 'bg-gray-100 text-gray-700 border-gray-200' };
+}
+
 function matchCard(m, idx) {
   const mapQuery = getMapQuery(m.campo);
+  const resultado = m.resultado || obtenerResultado(m.num);
+  const badge = resultBadge(resultado);
   return `
   <div class="bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
     <div class="bg-gray-100 px-4 py-2 text-xs font-bold text-gray-600 border-b flex justify-between items-center gap-2">
@@ -282,10 +407,12 @@ function matchCard(m, idx) {
           <h3 class="font-black text-gray-800 text-lg leading-tight">${m.team}</h3>
           <p class="text-sm font-bold text-gray-500 mt-2">vs ${m.rival}</p>
           <p class="text-xs text-green-700 font-bold mt-2 bg-green-50 inline-block px-2 py-1 rounded">Grupo ${m.group} · ${m.phase}</p>
+          ${badge ? `<p class="text-xs font-black mt-2 border inline-block px-2 py-1 rounded ${badge.cls}">${badge.label}</p>` : ''}
         </div>
-        <div class="text-center bg-red-50 text-red-700 px-4 py-3 rounded-lg border border-red-100 shadow-inner min-w-[80px]">
-          <div class="text-[10px] font-bold uppercase tracking-widest mb-1 opacity-80">Hora</div>
-          <div class="font-black text-2xl tracking-tighter">${m.time}</div>
+        <div class="text-center ${resultado ? 'bg-gray-800 text-white' : 'bg-red-50 text-red-700 border-red-100'} px-4 py-3 rounded-lg border shadow-inner min-w-[80px]">
+          ${resultado
+            ? `<div class="text-[10px] font-bold uppercase tracking-widest mb-1 opacity-80">Resultado</div><div class="font-black text-2xl tracking-tighter">${resultado}</div>`
+            : `<div class="text-[10px] font-bold uppercase tracking-widest mb-1 opacity-80">Hora</div><div class="font-black text-2xl tracking-tighter">${m.time}</div>`}
         </div>
       </div>
       <div class="mt-3 pt-3 border-t border-gray-100 flex flex-col gap-2">
@@ -310,15 +437,44 @@ function renderMatches() {
     <div class="space-y-4 fade-in">${filtered.map(matchCard).join('')}</div>`;
 }
 
+function standingsTable(rows, myTeamMatcher) {
+  return `<div class="overflow-x-auto -mx-1">
+    <table class="w-full text-[11px] border-collapse">
+      <thead>
+        <tr class="bg-gray-100 text-gray-500 font-bold uppercase">
+          <th class="px-1.5 py-2 text-left">#</th>
+          <th class="px-1.5 py-2 text-left">Equipo</th>
+          <th class="px-1 py-2">PJ</th><th class="px-1 py-2">G</th><th class="px-1 py-2">E</th><th class="px-1 py-2">P</th>
+          <th class="px-1 py-2">GF</th><th class="px-1 py-2">GC</th><th class="px-1 py-2">Pts</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(r => `<tr class="border-b border-gray-100 ${myTeamMatcher(r.team) ? 'bg-green-50 font-black text-green-800' : 'text-gray-700 font-semibold'}">
+          <td class="px-1.5 py-2">${r.pos}</td>
+          <td class="px-1.5 py-2">${myTeamMatcher(r.team) ? '⭐ ' : ''}${r.team}</td>
+          <td class="px-1 py-2 text-center">${r.pj}</td><td class="px-1 py-2 text-center">${r.pg}</td><td class="px-1 py-2 text-center">${r.pe}</td><td class="px-1 py-2 text-center">${r.pp}</td>
+          <td class="px-1 py-2 text-center">${r.gf}</td><td class="px-1 py-2 text-center">${r.gc}</td>
+          <td class="px-1 py-2 text-center">${r.pts}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
 function renderGroups() {
   const info = categoryInfo[selectedCategory];
   const groups = groupsData[info.code];
+  const standingsManual = standingsData[info.code] || {};
   let html = `<div class="bg-yellow-50 border border-yellow-200 p-3 rounded-lg mb-4 text-sm text-yellow-800 font-semibold">👥 Categoría ${info.code}. El CDE Pinar está en el <strong>Grupo ${info.group}</strong>.</div><div class="space-y-4">`;
   Object.keys(groups).forEach(g => {
     const isMine = g === info.group;
+    const rows = standingsManual[g] || calcularClasificacion(info.code, g);
     html += `<div class="bg-white border ${isMine ? 'border-green-400 border-l-4 border-l-green-500 shadow-md' : 'border-gray-200 shadow-sm'} p-4 rounded-xl">
       <div class="flex justify-between items-center mb-3"><h3 class="font-black text-gray-800 text-lg">Grupo ${g}</h3>${isMine ? '<span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-black">CDE PINAR</span>' : ''}</div>
-      <div class="space-y-2">${groups[g].map(t => `<div class="p-2 rounded-lg border text-sm font-bold ${t.includes('PINAR') ? 'bg-green-50 border-green-200 text-green-800' : 'bg-gray-50 border-gray-100 text-gray-700'}">${t.includes('PINAR') ? '⭐ ' : ''}${t}</div>`).join('')}</div>
+      ${rows
+        ? standingsTable(rows, t => t.includes('PINAR'))
+        : `<div class="space-y-2">${groups[g].map(t => `<div class="p-2 rounded-lg border text-sm font-bold ${t.includes('PINAR') ? 'bg-green-50 border-green-200 text-green-800' : 'bg-gray-50 border-gray-100 text-gray-700'}">${t.includes('PINAR') ? '⭐ ' : ''}${t}</div>`).join('')}</div>
+           <p class="text-[11px] text-gray-400 font-semibold mt-2">⏳ Clasificación aún no disponible</p>`}
     </div>`;
   });
   html += `</div>`;
@@ -328,6 +484,7 @@ function renderGroups() {
 function finalCard(f) {
   const isA = f.phase.includes('A');
   const mapQuery = getMapQuery(f.campo);
+  const resultado = f.resultado || obtenerResultado(f.num);
   return `<div class="bg-white border ${isA ? 'border-yellow-300' : 'border-blue-200'} shadow-sm rounded-xl overflow-hidden">
     <div class="${isA ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'} px-4 py-2 text-xs font-black border-b flex justify-between gap-2">
       <span>${f.phase} · ${f.round}</span><span>Nº ${f.num}</span>
@@ -339,7 +496,11 @@ function finalCard(f) {
           <p class="text-xs text-gray-400 font-bold my-1">contra</p>
           <p class="font-black text-gray-800 leading-tight">${f.visitor}</p>
         </div>
-        <div class="text-center bg-gray-50 px-3 py-2 rounded-lg border min-w-[76px]"><div class="text-[10px] text-gray-400 font-bold uppercase">Hora</div><div class="font-black text-gray-800 text-xl">${f.time}</div></div>
+        <div class="text-center ${resultado ? 'bg-gray-800 text-white' : 'bg-gray-50 border-gray-200'} px-3 py-2 rounded-lg border min-w-[76px]">
+          ${resultado
+            ? `<div class="text-[10px] font-bold uppercase opacity-80">Resultado</div><div class="font-black text-xl">${resultado}</div>`
+            : `<div class="text-[10px] text-gray-400 font-bold uppercase">Hora</div><div class="font-black text-gray-800 text-xl">${f.time}</div>`}
+        </div>
       </div>
       <p class="text-xs text-gray-500 font-bold mt-3">🗓️ ${f.date}</p>
       <div class="text-sm text-gray-800 flex items-start gap-2 bg-gray-50 p-2 rounded-lg border border-gray-100 mt-2"><span>📍</span><span class="font-bold flex-1 leading-snug">${f.campo}</span></div>
@@ -353,7 +514,7 @@ function renderFaseFinal() {
   const finals = finalData.filter(f => f.code === info.code);
   document.getElementById('final-container').innerHTML = `
     <div class="bg-yellow-50 border border-yellow-200 p-3 rounded-lg mb-4 text-sm text-yellow-800 font-semibold">
-      🏆 Cruces oficiales preparados para ${info.code}. Cuando se sepan los resultados, sustituye “1º Grupo”, “2º Grupo” o “Ganador partido” por el equipo real.
+      🏆 Cruces oficiales preparados para ${info.code}. Cuando se sepan los resultados, sustituye "1º Grupo", "2º Grupo" o "Ganador partido" por el equipo real (escribe "⭐ CDE PINAR ALCORCÓN" si es el Pinar, para que se vea destacado). Añade "resultado":"X-Y" en ese partido cuando se juegue.
     </div>
     <div class="bg-white border border-gray-200 rounded-xl p-3 mb-4 text-xs text-gray-600 font-bold">
       Regla práctica: si el equipo queda arriba jugará Fase Final A; si queda más abajo, Fase Final B o cruces de consolación según formato de su categoría.
@@ -380,6 +541,7 @@ function renderAll() {
 
 renderVenues();
 renderAll();
+cargarResultadosAutomaticos();
 </script>
 </body>
 </html>
