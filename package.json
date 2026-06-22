@@ -1,0 +1,13 @@
+{
+  "name": "cde-pinar-scraper",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Robot que lee resultados del Costa Blanca Futsal Cup para la app del CDE Pinar",
+  "scripts": {
+    "scrape": "node scrape.js"
+  },
+  "dependencies": {
+    "playwright": "^1.45.0"
+  }
+}
