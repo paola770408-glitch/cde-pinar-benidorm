@@ -1,0 +1,38 @@
+name: Actualizar resultados Costa Blanca Futsal Cup
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'   # cada 2 horas, todos los días
+  workflow_dispatch: {}       # te permite lanzarlo a mano desde la pestaña "Actions"
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Instalar el navegador (Chromium)
+        run: npx playwright install --with-deps chromium
+
+      - name: Ejecutar el robot de extracción
+        run: node scrape.js
+
+      - name: Subir resultados.json si ha cambiado
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add resultados.json
+          git diff --staged --quiet || git commit -m "Actualizar resultados automáticamente"
+          git push
