@@ -125,6 +125,60 @@ function calcularClasificacion(codigo, grupo) {
     .map((r, i) => ({ ...r, pos: i + 1 }));
 }
 
+/*
+  ===========================================================================
+  RESOLUCIÓN AUTOMÁTICA DE LA FASE FINAL
+  ===========================================================================
+  Convierte nombres provisionales como "1º GRUPO 1", "2º Mejor 3º" o
+  "GANADOR PARTIDO Nº108" en el nombre real del equipo, usando la
+  clasificación calculada y los resultados ya conocidos. No hace falta
+  editar nada a mano: en cuanto el robot traiga los resultados, esto se
+  recalcula solo cada vez que se abre la app.
+  ===========================================================================
+*/
+function mejoresTerceros(codigo) {
+  const grupos = Object.keys(groupsData[codigo] || {});
+  return grupos
+    .map(g => {
+      const tabla = calcularClasificacion(codigo, g);
+      return tabla ? tabla.find(r => r.pos === 3) : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.pts - a.pts || (b.gf - b.gc) - (a.gf - a.gc) || b.gf - a.gf);
+}
+
+function resolverEquipo(codigo, nombre, finalsCodigo, cache = {}) {
+  if (!nombre) return nombre;
+  if (cache[nombre]) return cache[nombre];
+
+  let m;
+  if ((m = nombre.match(/^([1-4])º GRUPO (\d+)$/))) {
+    const pos = parseInt(m[1], 10), grupo = m[2];
+    const tabla = calcularClasificacion(codigo, grupo);
+    const fila = tabla && tabla[pos - 1];
+    return fila ? fila.team : nombre;
+  }
+  if ((m = nombre.match(/^([1-3])º Mejor 3º$/))) {
+    const pos = parseInt(m[1], 10);
+    const fila = mejoresTerceros(codigo)[pos - 1];
+    return fila ? fila.team : nombre;
+  }
+  if ((m = nombre.match(/^GANADOR PARTIDO Nº(\d+)$/))) {
+    const numRef = parseInt(m[1], 10);
+    const fixture = finalsCodigo.find(f => f.num === numRef);
+    if (!fixture) return nombre;
+    const resultadoRef = fixture.resultado || obtenerResultado(fixture.num);
+    if (!resultadoRef) return nombre; // ese partido aún no se ha jugado
+    const partes = resultadoRef.split('-').map(s => parseInt(s.trim(), 10));
+    if (partes.length !== 2 || partes.some(isNaN) || partes[0] === partes[1]) return nombre;
+    cache[nombre] = nombre; // evita bucles infinitos por si hay referencias cruzadas
+    const localResuelto = resolverEquipo(codigo, fixture.local, finalsCodigo, cache);
+    const visitorResuelto = resolverEquipo(codigo, fixture.visitor, finalsCodigo, cache);
+    return partes[0] > partes[1] ? localResuelto : visitorResuelto;
+  }
+  return nombre; // ya es un nombre real
+}
+
 const categories = ["Benjamín", "Alevín A", "Alevín B", "Infantil", "Cadete", "Juvenil"];
 let selectedCategory = "Benjamín";
 let activeView = "partidos";
@@ -481,10 +535,28 @@ function renderGroups() {
   document.getElementById('groups-container').innerHTML = html;
 }
 
-function finalCard(f) {
+function finalCard(f, finalsCodigo) {
   const isA = f.phase.includes('A');
   const mapQuery = getMapQuery(f.campo);
   const resultado = f.resultado || obtenerResultado(f.num);
+  const local = resolverEquipo(f.code, f.local, finalsCodigo);
+  const visitor = resolverEquipo(f.code, f.visitor, finalsCodigo);
+  const localEsPinar = local.includes('PINAR');
+  const visitorEsPinar = visitor.includes('PINAR');
+  let badge = null;
+  if (resultado && (localEsPinar || visitorEsPinar)) {
+    const partes = resultado.split('-').map(s => parseInt(s.trim(), 10));
+    if (partes.length === 2 && !partes.some(isNaN)) {
+      const [gl, gv] = partes;
+      if (gl === gv) badge = { label: '🤝 EMPATE', cls: 'bg-gray-100 text-gray-700 border-gray-200' };
+      else {
+        const pinarGano = (localEsPinar && gl > gv) || (visitorEsPinar && gv > gl);
+        badge = pinarGano
+          ? { label: '✅ VICTORIA PINAR', cls: 'bg-green-100 text-green-700 border-green-200' }
+          : { label: '❌ DERROTA PINAR', cls: 'bg-red-100 text-red-700 border-red-200' };
+      }
+    }
+  }
   return `<div class="bg-white border ${isA ? 'border-yellow-300' : 'border-blue-200'} shadow-sm rounded-xl overflow-hidden">
     <div class="${isA ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'} px-4 py-2 text-xs font-black border-b flex justify-between gap-2">
       <span>${f.phase} · ${f.round}</span><span>Nº ${f.num}</span>
@@ -492,9 +564,10 @@ function finalCard(f) {
     <div class="p-4">
       <div class="flex justify-between items-start gap-3">
         <div class="flex-1">
-          <p class="font-black text-gray-800 leading-tight">${f.local}</p>
+          <p class="font-black ${localEsPinar ? 'text-green-700' : 'text-gray-800'} leading-tight">${localEsPinar ? '⭐ ' : ''}${local}</p>
           <p class="text-xs text-gray-400 font-bold my-1">contra</p>
-          <p class="font-black text-gray-800 leading-tight">${f.visitor}</p>
+          <p class="font-black ${visitorEsPinar ? 'text-green-700' : 'text-gray-800'} leading-tight">${visitorEsPinar ? '⭐ ' : ''}${visitor}</p>
+          ${badge ? `<p class="text-xs font-black mt-2 border inline-block px-2 py-1 rounded ${badge.cls}">${badge.label}</p>` : ''}
         </div>
         <div class="text-center ${resultado ? 'bg-gray-800 text-white' : 'bg-gray-50 border-gray-200'} px-3 py-2 rounded-lg border min-w-[76px]">
           ${resultado
@@ -514,12 +587,12 @@ function renderFaseFinal() {
   const finals = finalData.filter(f => f.code === info.code);
   document.getElementById('final-container').innerHTML = `
     <div class="bg-yellow-50 border border-yellow-200 p-3 rounded-lg mb-4 text-sm text-yellow-800 font-semibold">
-      🏆 Cruces oficiales preparados para ${info.code}. Cuando se sepan los resultados, sustituye "1º Grupo", "2º Grupo" o "Ganador partido" por el equipo real (escribe "⭐ CDE PINAR ALCORCÓN" si es el Pinar, para que se vea destacado). Añade "resultado":"X-Y" en ese partido cuando se juegue.
+      🏆 Cruces oficiales de ${info.code}. Los nombres de equipo y los resultados se completan solos en cuanto hay datos suficientes (clasificación o partido anterior jugado).
     </div>
     <div class="bg-white border border-gray-200 rounded-xl p-3 mb-4 text-xs text-gray-600 font-bold">
       Regla práctica: si el equipo queda arriba jugará Fase Final A; si queda más abajo, Fase Final B o cruces de consolación según formato de su categoría.
     </div>
-    <div class="space-y-4">${finals.map(finalCard).join('')}</div>`;
+    <div class="space-y-4">${finals.map(f => finalCard(f, finals)).join('')}</div>`;
 }
 
 function renderVenues() {
