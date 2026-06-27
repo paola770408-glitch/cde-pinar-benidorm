@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-06-27T15:05:20.283Z",
+  "actualizado": "2026-06-27T20:18:46.993Z",
   "partidos": [
     {
       "num": "87",
@@ -38,7 +38,7 @@
       "num": "94",
       "hora": "18:00",
       "local": "AFBB (A)",
-      "visitante": "OLE COLOMBIAN GROUP",
+      "visitante": "CLUB DEPORTIVO SEMILLANO",
       "resultado": null,
       "campo": "Calpe - Polideportivo - Fútbol Sala (2)",
       "fase": "Liguilla",
@@ -125,7 +125,7 @@
     {
       "num": "96",
       "hora": "13:00",
-      "local": "OLE COLOMBIAN GROUP",
+      "local": "CLUB DEPORTIVO SEMILLANO",
       "visitante": "WATTRELOS FUTSAL",
       "resultado": null,
       "campo": "Calpe - Polideportivo - Fútbol Sala (2)",
@@ -148,7 +148,7 @@
       "num": "98",
       "hora": "18:00",
       "local": "COLEGIO SANTA SUSANA",
-      "visitante": "OLE COLOMBIAN GROUP",
+      "visitante": "CLUB DEPORTIVO SEMILLANO",
       "resultado": null,
       "campo": "Altea - Polideportivo - Fútbol Sala (2)",
       "fase": "Liguilla",
@@ -1533,7 +1533,7 @@
     {
       "num": "36",
       "hora": "10:00",
-      "local": "",
+      "local": "FC PAJASOL",
       "visitante": "EFS LLANOS DE ARIDANE",
       "resultado": null,
       "campo": "Alfaz del Pi - Pabellón Pau Gasol - Fútbol Sala (1)",
@@ -1545,7 +1545,7 @@
       "num": "37",
       "hora": "17:00",
       "local": "AUSTRALIAN FUTSAL ASSOC. (B)",
-      "visitante": "",
+      "visitante": "FC PAJASOL",
       "resultado": null,
       "campo": "Benidorm - Raul Mesa - Fútbol Sala (1)",
       "fase": "Liguilla",
@@ -1765,7 +1765,7 @@
       "num": "39",
       "hora": "09:00",
       "local": "VENEZUELA FUTSAL CUP (A)",
-      "visitante": "",
+      "visitante": "FC PAJASOL",
       "resultado": null,
       "campo": "Benidorm - Raul Mesa - Fútbol Sala (1)",
       "fase": "Liguilla",
