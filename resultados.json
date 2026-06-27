@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-06-27T08:12:37.518Z",
+  "actualizado": "2026-06-27T15:05:20.283Z",
   "partidos": [
     {
       "num": "87",
@@ -1533,7 +1533,7 @@
     {
       "num": "36",
       "hora": "10:00",
-      "local": "OLE COLOMBIAN GROUP",
+      "local": "",
       "visitante": "EFS LLANOS DE ARIDANE",
       "resultado": null,
       "campo": "Alfaz del Pi - Pabellón Pau Gasol - Fútbol Sala (1)",
@@ -1545,7 +1545,7 @@
       "num": "37",
       "hora": "17:00",
       "local": "AUSTRALIAN FUTSAL ASSOC. (B)",
-      "visitante": "OLE COLOMBIAN GROUP",
+      "visitante": "",
       "resultado": null,
       "campo": "Benidorm - Raul Mesa - Fútbol Sala (1)",
       "fase": "Liguilla",
@@ -1765,7 +1765,7 @@
       "num": "39",
       "hora": "09:00",
       "local": "VENEZUELA FUTSAL CUP (A)",
-      "visitante": "OLE COLOMBIAN GROUP",
+      "visitante": "",
       "resultado": null,
       "campo": "Benidorm - Raul Mesa - Fútbol Sala (1)",
       "fase": "Liguilla",
