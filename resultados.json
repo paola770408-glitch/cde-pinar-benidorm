@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-06-30T23:55:04.639Z",
+  "actualizado": "2026-07-01T11:42:21.038Z",
   "partidos": [
     {
       "num": "87",
@@ -1522,7 +1522,7 @@
     {
       "num": "35",
       "hora": "10:00",
-      "local": "VENEZUELA FUTSAL CUP (A)",
+      "local": "ANTONIO & IVAN MAYA AC",
       "visitante": "AUSTRALIAN FUTSAL ASSOC. (B)",
       "resultado": null,
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",
@@ -1556,7 +1556,7 @@
       "num": "38",
       "hora": "19:00",
       "local": "EFS LLANOS DE ARIDANE",
-      "visitante": "VENEZUELA FUTSAL CUP (A)",
+      "visitante": "ANTONIO & IVAN MAYA AC",
       "resultado": null,
       "campo": "Alfaz del Pi - Pabellón Pau Gasol - Fútbol Sala (1)",
       "fase": "Liguilla",
@@ -1655,7 +1655,7 @@
       "num": "53",
       "hora": "09:00",
       "local": "AUSTRALIAN FUTSAL ASSOC. (C)",
-      "visitante": "VENEZUELA FUTSAL CUP (B)",
+      "visitante": "VENEZUELA FUTSAL CUP",
       "resultado": null,
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
       "fase": "Liguilla",
@@ -1675,11 +1675,11 @@
     },
     {
       "num": "55",
-      "hora": "16:00",
-      "local": "VENEZUELA FUTSAL CUP (B)",
+      "hora": "21:00",
+      "local": "VENEZUELA FUTSAL CUP",
       "visitante": "RIBECO CASTALLA F.S.",
       "resultado": null,
-      "campo": "Alfaz del Pi - Pabellón Pau Gasol - Fútbol Sala (1)",
+      "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
       "fase": "Liguilla",
       "categoria": "B16",
       "grupo": "5"
@@ -1764,7 +1764,7 @@
     {
       "num": "39",
       "hora": "09:00",
-      "local": "VENEZUELA FUTSAL CUP (A)",
+      "local": "ANTONIO & IVAN MAYA AC",
       "visitante": "FC PAJASOL",
       "resultado": null,
       "campo": "Benidorm - Raul Mesa - Fútbol Sala (1)",
@@ -1841,7 +1841,7 @@
     {
       "num": "58",
       "hora": "09:00",
-      "local": "VENEZUELA FUTSAL CUP (B)",
+      "local": "VENEZUELA FUTSAL CUP",
       "visitante": "CDE PINAR ALCORCÓN",
       "resultado": null,
       "campo": "Altea - Polideportivo - Fútbol Sala (1)",
