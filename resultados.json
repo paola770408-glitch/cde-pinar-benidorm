@@ -1,12 +1,12 @@
 {
-  "actualizado": "2026-07-02T14:42:53.312Z",
+  "actualizado": "2026-07-02T14:45:10.711Z",
   "partidos": [
     {
       "num": "87",
       "hora": "16:00",
       "local": "CDE PINAR ALCORCÓN",
       "visitante": "VENEZUELA FUTSAL CUP",
-      "resultado": null,
+      "resultado": "1 - 10",
       "campo": "Alfaz del Pi - Pabellón Pau Gasol - Fútbol Sala (1)",
       "fase": "Liguilla",
       "categoria": "B10",
