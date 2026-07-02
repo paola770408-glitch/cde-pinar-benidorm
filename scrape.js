@@ -39,7 +39,7 @@ function leerFilas(filas) {
 
     // Espera a que el encabezado confirme que cambió de categoría
     await page.locator('h4').filter({ hasText: new RegExp(`^${categoria}$`) }).waitFor({ timeout: 10000 });
-    await page.waitForTimeout(800); // pequeño margen para que la tabla termine de pintarse
+    await page.waitForTimeout2000); // pequeño margen para que la tabla termine de pintarse
 
     const filas = await page.$$eval('table.table-striped tbody tr', trs =>
       trs
@@ -48,7 +48,9 @@ function leerFilas(filas) {
     );
 
     leerFilas(filas).forEach(p => todosLosPartidos.push(p));
-    console.log(`✔ ${categoria}: ${leerFilas(filas).length} partidos leídos`);
+    console.log(`✔ ${categoria}: ${leerFilas(filas).length} if (leerFilas(filas).length === 0) {
+  throw new Error(`No se han leído partidos para ${categoria}`);
+}partidos leídos`);
   }
 
   await browser.close();
