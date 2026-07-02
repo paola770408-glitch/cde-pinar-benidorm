@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-02T10:05:42.638Z",
+  "actualizado": "2026-07-02T10:21:01.344Z",
   "partidos": [
     {
       "num": "87",
@@ -413,7 +413,7 @@
       "hora": "11:00",
       "local": "VERSIANE FUTSAL",
       "visitante": "COLEGIO SANTA SUSANA (B)",
-      "resultado": null,
+      "resultado": "9 - 2",
       "campo": "Altea - Polideportivo - Fútbol Sala (2)",
       "fase": "Liguilla",
       "categoria": "B12",
@@ -457,7 +457,7 @@
       "hora": "11:00",
       "local": "CFS SAN VICENTE DEL RASPEIG",
       "visitante": "COLEGIO SANTA SUSANA (A)",
-      "resultado": null,
+      "resultado": "5 - 4",
       "campo": "Altea - Polideportivo - Fútbol Sala (1)",
       "fase": "Liguilla",
       "categoria": "B12",
@@ -974,7 +974,7 @@
       "hora": "11:00",
       "local": "BUCKS FUTSAL CLUB",
       "visitante": "F.S. MÓSTOLES (A)",
-      "resultado": null,
+      "resultado": "1 - 15",
       "campo": "Villajoyosa - Maisa Lloret - Fútbol Sala (1)",
       "fase": "Liguilla",
       "categoria": "B14",
@@ -985,7 +985,7 @@
       "hora": "11:00",
       "local": "C.D. ENTRECULTURAS MONTESION (A)",
       "visitante": "NORMANDIE FUTSAL (B)",
-      "resultado": null,
+      "resultado": "6 - 3",
       "campo": "Calpe - Polideportivo - Fútbol Sala (2)",
       "fase": "Liguilla",
       "categoria": "B14",
