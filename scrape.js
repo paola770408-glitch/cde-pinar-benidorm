@@ -4,6 +4,12 @@ import fs from 'fs';
 const URL = 'https://tournaments.azurewebsites.net/costablancacupfutsal/1185?lang=es';
 const CATEGORIAS = ['B10', 'B12', 'B14', 'B16', 'B19'];
 
+const EQUIPOS_PINAR = [
+  'CDE PINAR ALCORCÓN',
+  'CDE PINAR ALCORCÓN (A)',
+  'CDE PINAR ALCORCÓN (B)'
+];
+
 function leerFilas(filas) {
   return filas
     .filter(celdas => celdas.length === 9)
@@ -21,40 +27,25 @@ function leerFilas(filas) {
     .filter(p => p.num && p.categoria);
 }
 
+function esPartidoPinar(p) {
+  return EQUIPOS_PINAR.includes(p.local) || EQUIPOS_PINAR.includes(p.visitante);
+}
+
 async function leerCategoria(page, categoria) {
   const boton = page.locator('label.e-btn').filter({
     hasText: new RegExp(`^${categoria}$`)
   });
 
   await boton.click();
+  await page.waitForTimeout(3000);
 
-  await page
-    .locator('h4')
-    .filter({ hasText: new RegExp(`^${categoria}$`) })
-    .waitFor({ timeout: 15000 });
-
-  await page.waitForFunction(
-    cat => {
-      const filas = Array.from(document.querySelectorAll('table.table-striped tbody tr'));
-      return filas.some(tr => {
-        if (tr.classList.contains('th-dark')) return false;
-        const celdas = Array.from(tr.querySelectorAll('td')).map(td => td.textContent.trim());
-        return celdas.length === 9 && celdas[7] === cat;
-      });
-    },
-    categoria,
-    { timeout: 20000 }
-  );
-
-  const filas = await page.$$eval('table.table-striped tbody tr', (trs, cat) =>
+  const filas = await page.$$eval('table.table-striped tbody tr', trs =>
     trs
       .filter(tr => !tr.classList.contains('th-dark'))
       .map(tr => Array.from(tr.querySelectorAll('td')).map(td => td.textContent.trim()))
-      .filter(celdas => celdas.length === 9 && celdas[7] === cat),
-    categoria
   );
 
-  return leerFilas(filas);
+  return leerFilas(filas).filter(p => p.categoria === categoria);
 }
 
 (async () => {
@@ -64,7 +55,7 @@ async function leerCategoria(page, categoria) {
     try {
       datosAnteriores = JSON.parse(fs.readFileSync('resultados.json', 'utf8'));
     } catch {
-      console.warn('⚠ No se pudo leer resultados.json anterior.');
+      console.warn('No se pudo leer resultados.json anterior.');
     }
   }
 
@@ -78,29 +69,25 @@ async function leerCategoria(page, categoria) {
   for (const categoria of CATEGORIAS) {
     try {
       const partidosCategoria = await leerCategoria(page, categoria);
+      const partidosPinar = partidosCategoria.filter(esPartidoPinar);
 
-      console.log(`✔ ${categoria}: ${partidosCategoria.length} partidos leídos`);
+      console.log(`✔ ${categoria}: ${partidosCategoria.length} partidos leídos, ${partidosPinar.length} del Pinar`);
 
-      if (partidosCategoria.length === 0) {
-        throw new Error(`0 partidos leídos para ${categoria}`);
+      if (partidosPinar.length === 0) {
+        console.warn(`⚠ No se han leído partidos del Pinar para ${categoria}. Se conserva versión anterior.`);
+        partidosPorCategoria[categoria] = datosAnteriores.partidos.filter(p => p.categoria === categoria);
+      } else {
+        partidosPorCategoria[categoria] = partidosCategoria;
       }
-
-      partidosPorCategoria[categoria] = partidosCategoria;
     } catch (error) {
       console.warn(`⚠ Error leyendo ${categoria}: ${error.message}`);
-      console.warn(`⚠ Se conserva la versión anterior de ${categoria}`);
-
-      partidosPorCategoria[categoria] = datosAnteriores.partidos.filter(
-        p => p.categoria === categoria
-      );
+      partidosPorCategoria[categoria] = datosAnteriores.partidos.filter(p => p.categoria === categoria);
     }
   }
 
   await browser.close();
 
-  const todosLosPartidos = CATEGORIAS.flatMap(
-    categoria => partidosPorCategoria[categoria] || []
-  );
+  const todosLosPartidos = CATEGORIAS.flatMap(categoria => partidosPorCategoria[categoria] || []);
 
   const salida = {
     actualizado: new Date().toISOString(),
@@ -108,6 +95,5 @@ async function leerCategoria(page, categoria) {
   };
 
   fs.writeFileSync('resultados.json', JSON.stringify(salida, null, 2));
-
   console.log(`Guardado resultados.json con ${todosLosPartidos.length} partidos en total.`);
 })();
