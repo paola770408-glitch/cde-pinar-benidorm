@@ -1,8 +1,3 @@
-// scrape.js
-// Robot que entra en la web del Costa Blanca Futsal Cup, recorre cada
-// categoría (B10, B12, B14, B16, B19) y guarda todos los partidos
-// (con su resultado, si ya se ha jugado) en resultados.json.
-
 import { chromium } from 'playwright';
 import fs from 'fs';
 
@@ -33,24 +28,39 @@ function leerFilas(filas) {
   const todosLosPartidos = [];
 
   for (const categoria of CATEGORIAS) {
-    // Pulsa el botón de la categoría (coincidencia exacta, p.ej. "B12" y no "G12")
-    const boton = page.locator('label.e-btn').filter({ hasText: new RegExp(`^${categoria}$`) });
+    const boton = page.locator('label.e-btn').filter({
+      hasText: new RegExp(`^${categoria}$`)
+    });
+
     await boton.click();
 
-    // Espera a que el encabezado confirme que cambió de categoría
-    await page.locator('h4').filter({ hasText: new RegExp(`^${categoria}$`) }).waitFor({ timeout: 10000 });
-    await page.waitForTimeout2000); // pequeño margen para que la tabla termine de pintarse
+    await page
+      .locator('h4')
+      .filter({ hasText: new RegExp(`^${categoria}$`) })
+      .waitFor({ timeout: 10000 });
+
+    await page.waitForTimeout(2000);
 
     const filas = await page.$$eval('table.table-striped tbody tr', trs =>
       trs
-        .filter(tr => !tr.classList.contains('th-dark')) // descarta las filas de separador de fecha
-        .map(tr => Array.from(tr.querySelectorAll('td')).map(td => td.textContent.trim()))
+        .filter(tr => !tr.classList.contains('th-dark'))
+        .map(tr =>
+          Array.from(tr.querySelectorAll('td')).map(td =>
+            td.textContent.trim()
+          )
+        )
     );
 
-    leerFilas(filas).forEach(p => todosLosPartidos.push(p));
-    console.log(`✔ ${categoria}: ${leerFilas(filas).length} if (leerFilas(filas).length === 0) {
-  throw new Error(`No se han leído partidos para ${categoria}`);
-}partidos leídos`);
+    const partidosCategoria = leerFilas(filas);
+
+    console.log(`✔ ${categoria}: ${partidosCategoria.length} partidos leídos`);
+
+    if (partidosCategoria.length === 0) {
+      console.warn(`⚠ No se han leído partidos para ${categoria}`);
+      continue;
+    }
+
+    partidosCategoria.forEach(p => todosLosPartidos.push(p));
   }
 
   await browser.close();
