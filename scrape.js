@@ -21,11 +21,17 @@ function leerFilas(filas) {
 }
 
 (async () => {
+  let datosAnteriores = { partidos: [] };
+
+  if (fs.existsSync('resultados.json')) {
+    datosAnteriores = JSON.parse(fs.readFileSync('resultados.json', 'utf8'));
+  }
+
   const browser = await chromium.launch();
   const page = await browser.newPage();
   await page.goto(URL, { waitUntil: 'networkidle' });
 
-  const todosLosPartidos = [];
+  const partidosPorCategoria = {};
 
   for (const categoria of CATEGORIAS) {
     const boton = page.locator('label.e-btn').filter({
@@ -56,14 +62,21 @@ function leerFilas(filas) {
     console.log(`✔ ${categoria}: ${partidosCategoria.length} partidos leídos`);
 
     if (partidosCategoria.length === 0) {
-      console.warn(`⚠ No se han leído partidos para ${categoria}`);
+      console.warn(`⚠ No se han leído partidos para ${categoria}. Se conserva la versión anterior.`);
+      partidosPorCategoria[categoria] = datosAnteriores.partidos.filter(
+        p => p.categoria === categoria
+      );
       continue;
     }
 
-    partidosCategoria.forEach(p => todosLosPartidos.push(p));
+    partidosPorCategoria[categoria] = partidosCategoria;
   }
 
   await browser.close();
+
+  const todosLosPartidos = CATEGORIAS.flatMap(
+    categoria => partidosPorCategoria[categoria] || []
+  );
 
   const salida = {
     actualizado: new Date().toISOString(),
@@ -71,5 +84,8 @@ function leerFilas(filas) {
   };
 
   fs.writeFileSync('resultados.json', JSON.stringify(salida, null, 2));
-  console.log(`Guardado resultados.json con ${todosLosPartidos.length} partidos en total.`);
+
+  console.log(
+    `Guardado resultados.json con ${todosLosPartidos.length} partidos en total.`
+  );
 })();
