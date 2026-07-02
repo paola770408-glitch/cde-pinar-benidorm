@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-02T18:18:29.755Z",
+  "actualizado": "2026-07-02T18:59:48.207Z",
   "partidos": [
     {
       "num": "87",
@@ -380,7 +380,7 @@
       "hora": "20:00",
       "local": "SOUTHAMPTON AZTECS BLACK",
       "visitante": "LICEO FRANCÉS MÁLAGA",
-      "resultado": null,
+      "resultado": "8 - 4",
       "campo": "Altea - Polideportivo - Fútbol Sala (2)",
       "fase": "Liguilla",
       "categoria": "B12",
@@ -391,7 +391,7 @@
       "hora": "20:00",
       "local": "CDE PINAR ALCORCÓN (B)",
       "visitante": "VENEZUELA FUTSAL CUP",
-      "resultado": null,
+      "resultado": "2 - 8",
       "campo": "Alfaz del Pi - Pabellón Pau Gasol - Fútbol Sala (1)",
       "fase": "Liguilla",
       "categoria": "B12",
@@ -2283,7 +2283,7 @@
       "hora": "13:00",
       "local": "AUSTRALIAN FUTSAL ASSOC. (B)",
       "visitante": "ASC GARGES DJIBSON FUTSAL",
-      "resultado": "3 - 0",
+      "resultado": null,
       "campo": "Altea - Polideportivo - Fútbol Sala (2)",
       "fase": "Liguilla",
       "categoria": "B19",
@@ -2294,7 +2294,7 @@
       "hora": "18:00",
       "local": "ASC GARGES DJIBSON FUTSAL",
       "visitante": "C.D. CALPE FUTSAL",
-      "resultado": "0 - 3",
+      "resultado": null,
       "campo": "Calpe - Polideportivo - Fútbol Sala (1)",
       "fase": "Liguilla",
       "categoria": "B19",
