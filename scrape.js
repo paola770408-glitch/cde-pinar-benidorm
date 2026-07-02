@@ -17,59 +17,83 @@ function leerFilas(filas) {
       fase: celdas[6],
       categoria: celdas[7],
       grupo: celdas[8],
-    }));
+    }))
+    .filter(p => p.num && p.categoria);
+}
+
+async function leerCategoria(page, categoria) {
+  const boton = page.locator('label.e-btn').filter({
+    hasText: new RegExp(`^${categoria}$`)
+  });
+
+  await boton.click();
+
+  await page
+    .locator('h4')
+    .filter({ hasText: new RegExp(`^${categoria}$`) })
+    .waitFor({ timeout: 15000 });
+
+  await page.waitForFunction(
+    cat => {
+      const filas = Array.from(document.querySelectorAll('table.table-striped tbody tr'));
+      return filas.some(tr => {
+        if (tr.classList.contains('th-dark')) return false;
+        const celdas = Array.from(tr.querySelectorAll('td')).map(td => td.textContent.trim());
+        return celdas.length === 9 && celdas[7] === cat;
+      });
+    },
+    categoria,
+    { timeout: 20000 }
+  );
+
+  const filas = await page.$$eval('table.table-striped tbody tr', (trs, cat) =>
+    trs
+      .filter(tr => !tr.classList.contains('th-dark'))
+      .map(tr => Array.from(tr.querySelectorAll('td')).map(td => td.textContent.trim()))
+      .filter(celdas => celdas.length === 9 && celdas[7] === cat),
+    categoria
+  );
+
+  return leerFilas(filas);
 }
 
 (async () => {
   let datosAnteriores = { partidos: [] };
 
   if (fs.existsSync('resultados.json')) {
-    datosAnteriores = JSON.parse(fs.readFileSync('resultados.json', 'utf8'));
+    try {
+      datosAnteriores = JSON.parse(fs.readFileSync('resultados.json', 'utf8'));
+    } catch {
+      console.warn('⚠ No se pudo leer resultados.json anterior.');
+    }
   }
 
   const browser = await chromium.launch();
   const page = await browser.newPage();
-  await page.goto(URL, { waitUntil: 'networkidle' });
+
+  await page.goto(URL, { waitUntil: 'networkidle', timeout: 60000 });
 
   const partidosPorCategoria = {};
 
   for (const categoria of CATEGORIAS) {
-    const boton = page.locator('label.e-btn').filter({
-      hasText: new RegExp(`^${categoria}$`)
-    });
+    try {
+      const partidosCategoria = await leerCategoria(page, categoria);
 
-    await boton.click();
+      console.log(`✔ ${categoria}: ${partidosCategoria.length} partidos leídos`);
 
-    await page
-      .locator('h4')
-      .filter({ hasText: new RegExp(`^${categoria}$`) })
-      .waitFor({ timeout: 10000 });
+      if (partidosCategoria.length === 0) {
+        throw new Error(`0 partidos leídos para ${categoria}`);
+      }
 
-    await page.waitForTimeout(2000);
+      partidosPorCategoria[categoria] = partidosCategoria;
+    } catch (error) {
+      console.warn(`⚠ Error leyendo ${categoria}: ${error.message}`);
+      console.warn(`⚠ Se conserva la versión anterior de ${categoria}`);
 
-    const filas = await page.$$eval('table.table-striped tbody tr', trs =>
-      trs
-        .filter(tr => !tr.classList.contains('th-dark'))
-        .map(tr =>
-          Array.from(tr.querySelectorAll('td')).map(td =>
-            td.textContent.trim()
-          )
-        )
-    );
-
-    const partidosCategoria = leerFilas(filas);
-
-    console.log(`✔ ${categoria}: ${partidosCategoria.length} partidos leídos`);
-
-    if (partidosCategoria.length === 0) {
-      console.warn(`⚠ No se han leído partidos para ${categoria}. Se conserva la versión anterior.`);
       partidosPorCategoria[categoria] = datosAnteriores.partidos.filter(
         p => p.categoria === categoria
       );
-      continue;
     }
-
-    partidosPorCategoria[categoria] = partidosCategoria;
   }
 
   await browser.close();
@@ -85,7 +109,5 @@ function leerFilas(filas) {
 
   fs.writeFileSync('resultados.json', JSON.stringify(salida, null, 2));
 
-  console.log(
-    `Guardado resultados.json con ${todosLosPartidos.length} partidos en total.`
-  );
+  console.log(`Guardado resultados.json con ${todosLosPartidos.length} partidos en total.`);
 })();
