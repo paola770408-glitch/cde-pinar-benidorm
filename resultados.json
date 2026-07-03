@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-03T10:01:46.411Z",
+  "actualizado": "2026-07-03T10:17:08.574Z",
   "partidos": [
     {
       "num": "87",
@@ -1854,7 +1854,7 @@
       "hora": "11:00",
       "local": "SAINT OUEN FUTSAL",
       "visitante": "CIUDAD DE LORCA F.S.",
-      "resultado": null,
+      "resultado": "1 - 9",
       "campo": "Altea - Polideportivo - Fútbol Sala (1)",
       "fase": "Liguilla",
       "categoria": "B16",
@@ -1907,7 +1907,7 @@
     {
       "num": "68",
       "hora": "19:00",
-      "local": "4º GRUPO 6",
+      "local": "SAINT OUEN FUTSAL",
       "visitante": "3º GRUPO 3",
       "resultado": null,
       "campo": "Calpe - Polideportivo - Fútbol Sala (2)",
@@ -1951,7 +1951,7 @@
     {
       "num": "79",
       "hora": "19:00",
-      "local": "2º GRUPO 6",
+      "local": "CIUDAD DE LORCA F.S.",
       "visitante": "1º GRUPO 3",
       "resultado": null,
       "campo": "Alfaz del Pi - Pabellón Pau Gasol - Fútbol Sala (1)",
@@ -1995,7 +1995,7 @@
     {
       "num": "72",
       "hora": "13:00",
-      "local": "3º GRUPO 6",
+      "local": "BISHOPS STORTFORD FUTSAL CLUB",
       "visitante": "GANADOR PARTIDO Nº66",
       "resultado": null,
       "campo": "Benidorm - Raul Mesa - Fútbol Sala (1)",
@@ -2061,7 +2061,7 @@
     {
       "num": "83",
       "hora": "13:00",
-      "local": "1º GRUPO 6",
+      "local": "ALONIS VILLAJOYOSA F.S.",
       "visitante": "GANADOR PARTIDO Nº77",
       "resultado": null,
       "campo": "Villajoyosa - Maisa Lloret - Fútbol Sala (1)",
