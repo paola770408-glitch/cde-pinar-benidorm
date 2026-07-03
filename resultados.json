@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-03T13:08:59.454Z",
+  "actualizado": "2026-07-03T14:01:44.906Z",
   "partidos": [
     {
       "num": "87",
@@ -1678,7 +1678,7 @@
       "hora": "21:00",
       "local": "VENEZUELA FUTSAL CUP",
       "visitante": "RIBECO CASTALLA F.S.",
-      "resultado": null,
+      "resultado": "6 - 5",
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
       "fase": "Liguilla",
       "categoria": "B16",
@@ -1897,7 +1897,7 @@
       "num": "67",
       "hora": "19:00",
       "local": "COLEGIO SANTA SUSANA (A)",
-      "visitante": "4º GRUPO 5",
+      "visitante": "RIBECO CASTALLA F.S.",
       "resultado": null,
       "campo": "Calpe - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final B",
@@ -1941,7 +1941,7 @@
       "num": "78",
       "hora": "19:00",
       "local": "VERSIANE FUTSAL",
-      "visitante": "2º GRUPO 5",
+      "visitante": "VENEZUELA FUTSAL CUP",
       "resultado": null,
       "campo": "Villajoyosa - Maisa Lloret - Fútbol Sala (1)",
       "fase": "Fase final A",
@@ -1984,7 +1984,7 @@
     {
       "num": "71",
       "hora": "13:00",
-      "local": "3º GRUPO 5",
+      "local": "AUSTRALIAN FUTSAL ASSOC. (C)",
       "visitante": "GANADOR PARTIDO Nº65",
       "resultado": null,
       "campo": "Altea - Polideportivo - Fútbol Sala (2)",
@@ -2050,7 +2050,7 @@
     {
       "num": "82",
       "hora": "13:00",
-      "local": "1º GRUPO 5",
+      "local": "CDE PINAR ALCORCÓN",
       "visitante": "GANADOR PARTIDO Nº76",
       "resultado": null,
       "campo": "Altea - Polideportivo - Fútbol Sala (1)",
