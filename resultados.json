@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-04T16:24:04.365Z",
+  "actualizado": "2026-07-04T17:14:06.691Z",
   "partidos": [
     {
       "num": "87",
@@ -1381,7 +1381,7 @@
       "hora": "18:00",
       "local": "AUSTRALIAN FUTSAL ASSOC.",
       "visitante": "NORMANDIE FUTSAL (B)",
-      "resultado": null,
+      "resultado": "3 - 8",
       "campo": "Calpe - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final B",
       "categoria": "B14",
@@ -1436,7 +1436,7 @@
       "hora": "18:00",
       "local": "NORMANDIE FUTSAL (A)",
       "visitante": "VERSIANE FUTSAL",
-      "resultado": null,
+      "resultado": "2 - 7",
       "campo": "Altea - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final A",
       "categoria": "B14",
@@ -1447,7 +1447,7 @@
       "hora": "18:00",
       "local": "CDE PINAR ALCORCÓN",
       "visitante": "F.S. MÓSTOLES (A)",
-      "resultado": null,
+      "resultado": "2 - 5",
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
       "fase": "Fase final A",
       "categoria": "B14",
@@ -1457,7 +1457,7 @@
       "num": "179",
       "hora": "12:00",
       "local": "SANTA MARÍA LA BLANCA",
-      "visitante": "GANADOR PARTIDO Nº178",
+      "visitante": "NORMANDIE FUTSAL (B)",
       "resultado": null,
       "campo": "Altea - Polideportivo - Fútbol Sala (2)",
       "fase": "Fase final B",
@@ -1467,8 +1467,8 @@
     {
       "num": "190",
       "hora": "12:30",
-      "local": "GANADOR PARTIDO Nº188",
-      "visitante": "GANADOR PARTIDO Nº189",
+      "local": "VERSIANE FUTSAL",
+      "visitante": "F.S. MÓSTOLES (A)",
       "resultado": null,
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",
       "fase": "Fase final A",
