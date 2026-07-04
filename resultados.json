@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-04T11:23:50.113Z",
+  "actualizado": "2026-07-04T11:25:53.341Z",
   "partidos": [
     {
       "num": "87",
@@ -1337,7 +1337,7 @@
       "hora": "12:00",
       "local": "DINAMIK BONDY FUTSAL",
       "visitante": "F.S. MÓSTOLES (B)",
-      "resultado": null,
+      "resultado": "8 - 7",
       "campo": "Benidorm - Raul Mesa - Fútbol Sala (1)",
       "fase": "Fase final B",
       "categoria": "B14",
@@ -1369,7 +1369,7 @@
       "num": "177",
       "hora": "18:00",
       "local": "SANTA MARÍA LA BLANCA",
-      "visitante": "GANADOR PARTIDO Nº174",
+      "visitante": "DINAMIK BONDY FUTSAL",
       "resultado": null,
       "campo": "Altea - Polideportivo - Fútbol Sala (2)",
       "fase": "Fase final B",
@@ -1392,7 +1392,7 @@
       "hora": "12:00",
       "local": "NORMANDIE FUTSAL (A)",
       "visitante": "C.D. ENTRECULTURAS MONTESION (A)",
-      "resultado": null,
+      "resultado": "6 - 5",
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
       "fase": "Fase final A",
       "categoria": "B14",
@@ -1434,7 +1434,7 @@
     {
       "num": "188",
       "hora": "18:00",
-      "local": "GANADOR PARTIDO Nº184",
+      "local": "NORMANDIE FUTSAL (A)",
       "visitante": "VERSIANE FUTSAL",
       "resultado": null,
       "campo": "Altea - Polideportivo - Fútbol Sala (1)",
