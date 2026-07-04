@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-04T10:18:55.329Z",
+  "actualizado": "2026-07-04T10:21:16.232Z",
   "partidos": [
     {
       "num": "87",
@@ -710,7 +710,7 @@
       "hora": "11:00",
       "local": "COLEGIO SANTA SUSANA (A)",
       "visitante": "WATTRELOS FUTSAL",
-      "resultado": null,
+      "resultado": "3 - 4",
       "campo": "Alfaz del Pi - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final B",
       "categoria": "B12",
@@ -721,7 +721,7 @@
       "hora": "11:00",
       "local": "BUCKS FUTSAL CLUB",
       "visitante": "UDAF (B)",
-      "resultado": null,
+      "resultado": "3 - 4",
       "campo": "Altea - Polideportivo - Fútbol Sala (2)",
       "fase": "Fase final B",
       "categoria": "B12",
@@ -741,8 +741,8 @@
     {
       "num": "228",
       "hora": "17:00",
-      "local": "GANADOR PARTIDO Nº225",
-      "visitante": "GANADOR PARTIDO Nº226",
+      "local": "WATTRELOS FUTSAL",
+      "visitante": "UDAF (B)",
       "resultado": null,
       "campo": "Benidorm - Raul Mesa - Fútbol Sala (1)",
       "fase": "Fase final B",
@@ -776,7 +776,7 @@
       "hora": "10:00",
       "local": "ASSOC. NANTAISE FUTSAL",
       "visitante": "VENEZUELA FUTSAL CUP",
-      "resultado": null,
+      "resultado": "9 - 8",
       "campo": "Villajoyosa - Maisa Lloret - Fútbol Sala (1)",
       "fase": "Fase final A",
       "categoria": "B12",
@@ -807,7 +807,7 @@
     {
       "num": "237",
       "hora": "16:00",
-      "local": "GANADOR PARTIDO Nº234",
+      "local": "ASSOC. NANTAISE FUTSAL",
       "visitante": "F.S. MÓSTOLES",
       "resultado": null,
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",
