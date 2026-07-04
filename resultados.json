@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-04T11:07:08.510Z",
+  "actualizado": "2026-07-04T11:23:50.113Z",
   "partidos": [
     {
       "num": "87",
@@ -1425,7 +1425,7 @@
       "hora": "12:00",
       "local": "AFC ILE SAINT DENIS",
       "visitante": "F.S. MÓSTOLES (A)",
-      "resultado": null,
+      "resultado": "3 - 9",
       "campo": "Villajoyosa - Maisa Lloret - Fútbol Sala (1)",
       "fase": "Fase final A",
       "categoria": "B14",
@@ -1446,7 +1446,7 @@
       "num": "189",
       "hora": "18:00",
       "local": "CDE PINAR ALCORCÓN",
-      "visitante": "GANADOR PARTIDO Nº187",
+      "visitante": "F.S. MÓSTOLES (A)",
       "resultado": null,
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
       "fase": "Fase final A",
