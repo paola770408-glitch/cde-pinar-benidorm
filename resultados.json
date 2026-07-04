@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-03T21:45:56.098Z",
+  "actualizado": "2026-07-04T08:04:10.153Z",
   "partidos": [
     {
       "num": "87",
@@ -226,7 +226,7 @@
       "hora": "09:00",
       "local": "SAINT OUEN FUTSAL",
       "visitante": "WATTRELOS FUTSAL",
-      "resultado": null,
+      "resultado": "15 - 0",
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",
       "fase": "Fase final A",
       "categoria": "B10",
@@ -237,7 +237,7 @@
       "hora": "09:00",
       "local": "CRETEIL PALAIS FUTSAL",
       "visitante": "VENEZUELA FUTSAL CUP",
-      "resultado": null,
+      "resultado": "6 - 2",
       "campo": "Altea - Polideportivo - Fútbol Sala (2)",
       "fase": "Fase final A",
       "categoria": "B10",
@@ -248,7 +248,7 @@
       "hora": "09:00",
       "local": "CLUB DEPORTIVO SEMILLANO",
       "visitante": "C.D. CALPE FUTSAL",
-      "resultado": null,
+      "resultado": "4 - 1",
       "campo": "Calpe - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final A",
       "categoria": "B10",
@@ -268,8 +268,8 @@
     {
       "num": "112",
       "hora": "16:00",
-      "local": "GANADOR PARTIDO Nº108",
-      "visitante": "GANADOR PARTIDO Nº109",
+      "local": "SAINT OUEN FUTSAL",
+      "visitante": "CRETEIL PALAIS FUTSAL",
       "resultado": null,
       "campo": "Altea - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final A",
@@ -279,7 +279,7 @@
     {
       "num": "113",
       "hora": "16:00",
-      "local": "GANADOR PARTIDO Nº110",
+      "local": "CLUB DEPORTIVO SEMILLANO",
       "visitante": "GANADOR PARTIDO Nº111",
       "resultado": null,
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
