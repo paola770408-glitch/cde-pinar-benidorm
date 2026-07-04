@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-04T17:31:08.559Z",
+  "actualizado": "2026-07-04T18:25:56.244Z",
   "partidos": [
     {
       "num": "87",
@@ -2008,7 +2008,7 @@
       "hora": "19:00",
       "local": "DIAMANT FUTSAL",
       "visitante": "A.E. LA SALLE DE PONT D´INCA",
-      "resultado": null,
+      "resultado": "2 - 3",
       "campo": "Benidorm - Raul Mesa - Fútbol Sala (1)",
       "fase": "Fase final B",
       "categoria": "B16",
@@ -2019,7 +2019,7 @@
       "hora": "19:00",
       "local": "AUSTRALIAN FUTSAL ASSOC. (C)",
       "visitante": "VAUREAL FUTSAL",
-      "resultado": null,
+      "resultado": "2 - 10",
       "campo": "Villajoyosa - Maisa Lloret - Fútbol Sala (1)",
       "fase": "Fase final B",
       "categoria": "B16",
@@ -2085,7 +2085,7 @@
       "hora": "19:00",
       "local": "CFS L´ALFAS DEL PI",
       "visitante": "ALONIS VILLAJOYOSA F.S.",
-      "resultado": null,
+      "resultado": "7 - 6",
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
       "fase": "Fase final A",
       "categoria": "B16",
@@ -2094,8 +2094,8 @@
     {
       "num": "75",
       "hora": "12:00",
-      "local": "GANADOR PARTIDO Nº73",
-      "visitante": "GANADOR PARTIDO Nº74",
+      "local": "A.E. LA SALLE DE PONT D´INCA",
+      "visitante": "VAUREAL FUTSAL",
       "resultado": null,
       "campo": "Altea - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final B",
@@ -2106,7 +2106,7 @@
       "num": "86",
       "hora": "12:45",
       "local": "GANADOR PARTIDO Nº84",
-      "visitante": "GANADOR PARTIDO Nº85",
+      "visitante": "CFS L´ALFAS DEL PI",
       "resultado": null,
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
       "fase": "Fase final A",
