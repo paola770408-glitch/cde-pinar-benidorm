@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-04T18:25:56.244Z",
+  "actualizado": "2026-07-04T18:55:47.096Z",
   "partidos": [
     {
       "num": "87",
@@ -2074,7 +2074,7 @@
       "hora": "19:00",
       "local": "VERSIANE FUTSAL",
       "visitante": "FC PAJASOL",
-      "resultado": null,
+      "resultado": "9 - 10",
       "campo": "Altea - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final A",
       "categoria": "B16",
@@ -2105,7 +2105,7 @@
     {
       "num": "86",
       "hora": "12:45",
-      "local": "GANADOR PARTIDO Nº84",
+      "local": "FC PAJASOL",
       "visitante": "CFS L´ALFAS DEL PI",
       "resultado": null,
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
