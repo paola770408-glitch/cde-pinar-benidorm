@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-04T08:13:21.972Z",
+  "actualizado": "2026-07-04T08:54:59.589Z",
   "partidos": [
     {
       "num": "87",
@@ -259,7 +259,7 @@
       "hora": "10:00",
       "local": "ALICANTE ALL STARS",
       "visitante": "KILCLOON FC",
-      "resultado": null,
+      "resultado": "3 - 4",
       "campo": "Altea - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final A",
       "categoria": "B10",
@@ -280,7 +280,7 @@
       "num": "113",
       "hora": "16:00",
       "local": "CLUB DEPORTIVO SEMILLANO",
-      "visitante": "GANADOR PARTIDO Nº111",
+      "visitante": "KILCLOON FC",
       "resultado": null,
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
       "fase": "Fase final A",
