@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-04T11:25:53.341Z",
+  "actualizado": "2026-07-04T11:40:24.746Z",
   "partidos": [
     {
       "num": "87",
@@ -1359,7 +1359,7 @@
       "hora": "12:00",
       "local": "C.D. ENTRECULTURAS MONTESION (B)",
       "visitante": "NORMANDIE FUTSAL (B)",
-      "resultado": null,
+      "resultado": "2 - 6",
       "campo": "Alfaz del Pi - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final B",
       "categoria": "B14",
@@ -1380,7 +1380,7 @@
       "num": "178",
       "hora": "18:00",
       "local": "AUSTRALIAN FUTSAL ASSOC.",
-      "visitante": "GANADOR PARTIDO Nº176",
+      "visitante": "NORMANDIE FUTSAL (B)",
       "resultado": null,
       "campo": "Calpe - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final B",
