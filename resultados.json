@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-04T10:24:51.891Z",
+  "actualizado": "2026-07-04T11:03:04.808Z",
   "partidos": [
     {
       "num": "87",
@@ -1348,7 +1348,7 @@
       "hora": "12:00",
       "local": "AUSTRALIAN FUTSAL ASSOC.",
       "visitante": "ASSOC. MUNDO MODERNO DE FUTSAL",
-      "resultado": null,
+      "resultado": "6 - 4",
       "campo": "Altea - Polideportivo - Fútbol Sala (2)",
       "fase": "Fase final B",
       "categoria": "B14",
@@ -1379,7 +1379,7 @@
     {
       "num": "178",
       "hora": "18:00",
-      "local": "GANADOR PARTIDO Nº175",
+      "local": "AUSTRALIAN FUTSAL ASSOC.",
       "visitante": "GANADOR PARTIDO Nº176",
       "resultado": null,
       "campo": "Calpe - Polideportivo - Fútbol Sala (1)",
@@ -1403,7 +1403,7 @@
       "hora": "12:00",
       "local": "VERSIANE FUTSAL",
       "visitante": "NANTES DOULON BOTTIÈRE FUTSAL",
-      "resultado": null,
+      "resultado": "6 - 2",
       "campo": "Calpe - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final A",
       "categoria": "B14",
@@ -1414,7 +1414,7 @@
       "hora": "12:00",
       "local": "CDE PINAR ALCORCÓN",
       "visitante": "RIBECO CASTALLA F.S.",
-      "resultado": null,
+      "resultado": "6 - 2",
       "campo": "Altea - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final A",
       "categoria": "B14",
@@ -1435,7 +1435,7 @@
       "num": "188",
       "hora": "18:00",
       "local": "GANADOR PARTIDO Nº184",
-      "visitante": "GANADOR PARTIDO Nº185",
+      "visitante": "VERSIANE FUTSAL",
       "resultado": null,
       "campo": "Altea - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final A",
@@ -1445,7 +1445,7 @@
     {
       "num": "189",
       "hora": "18:00",
-      "local": "GANADOR PARTIDO Nº186",
+      "local": "CDE PINAR ALCORCÓN",
       "visitante": "GANADOR PARTIDO Nº187",
       "resultado": null,
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
@@ -1964,7 +1964,7 @@
       "hora": "12:00",
       "local": "DIAMANT FUTSAL",
       "visitante": "RIBECO CASTALLA F.S.",
-      "resultado": null,
+      "resultado": "7 - 6",
       "campo": "Calpe - Polideportivo - Fútbol Sala (2)",
       "fase": "Fase final B",
       "categoria": "B16",
@@ -2006,7 +2006,7 @@
     {
       "num": "73",
       "hora": "19:00",
-      "local": "GANADOR PARTIDO Nº69",
+      "local": "DIAMANT FUTSAL",
       "visitante": "GANADOR PARTIDO Nº70",
       "resultado": null,
       "campo": "Benidorm - Raul Mesa - Fútbol Sala (1)",
