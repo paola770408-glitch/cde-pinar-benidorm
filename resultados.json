@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-04T14:51:39.550Z",
+  "actualizado": "2026-07-04T15:01:32.361Z",
   "partidos": [
     {
       "num": "87",
@@ -809,7 +809,7 @@
       "hora": "16:00",
       "local": "ASSOC. NANTAISE FUTSAL",
       "visitante": "F.S. MÓSTOLES",
-      "resultado": null,
+      "resultado": "4 - 0",
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (1)",
       "fase": "Fase final A",
       "categoria": "B12",
@@ -830,7 +830,7 @@
       "num": "238",
       "hora": "09:45",
       "local": "VERSIANE FUTSAL",
-      "visitante": "GANADOR PARTIDO Nº237",
+      "visitante": "ASSOC. NANTAISE FUTSAL",
       "resultado": null,
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
       "fase": "Fase final A",
