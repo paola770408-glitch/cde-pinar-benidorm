@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-04T16:11:49.039Z",
+  "actualizado": "2026-07-04T16:14:32.222Z",
   "partidos": [
     {
       "num": "87",
@@ -2382,7 +2382,7 @@
       "hora": "17:00",
       "local": "LICEO FRANCÉS MÁLAGA (A)",
       "visitante": "CLUB TIGRES F.S.",
-      "resultado": "0 - 0",
+      "resultado": "7 - 5",
       "campo": "Altea - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final A",
       "categoria": "B19",
@@ -2413,7 +2413,7 @@
     {
       "num": "28",
       "hora": "11:15",
-      "local": "CLUB TIGRES F.S.",
+      "local": "LICEO FRANCÉS MÁLAGA (A)",
       "visitante": "VENEZUELA FUTSAL CUP (A)",
       "resultado": null,
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
