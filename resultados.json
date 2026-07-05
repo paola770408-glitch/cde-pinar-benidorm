@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-05T08:33:25.113Z",
+  "actualizado": "2026-07-05T09:04:17.831Z",
   "partidos": [
     {
       "num": "87",
@@ -292,7 +292,7 @@
       "hora": "10:00",
       "local": "CDE PINAR ALCORCÓN",
       "visitante": "AFBB (A)",
-      "resultado": null,
+      "resultado": "8 - 7",
       "campo": "Altea - Polideportivo - Fútbol Sala (2)",
       "fase": "Fase final B",
       "categoria": "B10",
@@ -820,7 +820,7 @@
       "hora": "10:00",
       "local": "LICEO FRANCÉS MÁLAGA",
       "visitante": "WATTRELOS FUTSAL",
-      "resultado": null,
+      "resultado": "7 - 3",
       "campo": "Altea - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final B",
       "categoria": "B12",
@@ -831,7 +831,7 @@
       "hora": "09:45",
       "local": "VERSIANE FUTSAL",
       "visitante": "ASSOC. NANTAISE FUTSAL",
-      "resultado": null,
+      "resultado": "3 - 0",
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
       "fase": "Fase final A",
       "categoria": "B12",
