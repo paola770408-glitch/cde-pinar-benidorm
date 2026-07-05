@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-05T10:17:43.334Z",
+  "actualizado": "2026-07-05T10:27:15.929Z",
   "partidos": [
     {
       "num": "87",
@@ -2415,7 +2415,7 @@
       "hora": "11:15",
       "local": "LICEO FRANCÉS MÁLAGA (A)",
       "visitante": "VENEZUELA FUTSAL CUP (A)",
-      "resultado": null,
+      "resultado": "0 - 4",
       "campo": "Benidorm - L'Illa de Benidorm - Fútbol Sala (2)",
       "fase": "Fase final A",
       "categoria": "B19",
