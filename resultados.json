@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-07-05T10:31:14.221Z",
+  "actualizado": "2026-07-05T11:38:44.535Z",
   "partidos": [
     {
       "num": "87",
@@ -1458,7 +1458,7 @@
       "hora": "12:00",
       "local": "SANTA MARÍA LA BLANCA",
       "visitante": "NORMANDIE FUTSAL (B)",
-      "resultado": null,
+      "resultado": "3 - 0",
       "campo": "Altea - Polideportivo - Fútbol Sala (2)",
       "fase": "Fase final B",
       "categoria": "B14",
@@ -2096,7 +2096,7 @@
       "hora": "12:00",
       "local": "A.E. LA SALLE DE PONT D´INCA",
       "visitante": "VAUREAL FUTSAL",
-      "resultado": null,
+      "resultado": "2 - 4",
       "campo": "Altea - Polideportivo - Fútbol Sala (1)",
       "fase": "Fase final B",
       "categoria": "B16",
